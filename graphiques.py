@@ -1,14 +1,15 @@
 from tkinter import *
 
-cases = []
+cases = [[[(k, i), (k + 50, i), (k, i + 50), ] for k in range(0, 500, 50)] for i in range(0, 500, 50)]
 
-def Touche(x,y):
-    pass
+def Touche(x,y,joueur):
+    if joueur == 1:
+        aire_jeu1.create_rectangle(cases[x][y][i] for i in range(4))
 
 def Tir(x,y):
     pass
 
-def Grille():
+def Grille(): #création de la grille de base
     for colonne in range(1, 10):
         aire_jeu1.create_line(50 * colonne, 0, 50 * colonne, 500, fill = 'black')
         aire_jeu1.create_line(0, 50 * colonne, 500, 50 * colonne, fill = 'black')
