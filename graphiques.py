@@ -18,6 +18,18 @@ class Bateau:
         else:
             aire_jeu2.create_rectangle(cases[x][y][i] for i in range(4))
 
+#verification qu'une case choisie est valide 
+def Valide(bateau, case_choisie):
+    cases_a_cote = [[1, 0], [-1,0], [0, -1], [0, 1]]
+    valide = False
+    for case in cases_a_cote:
+        if [case_choisie[0] + case[0], case_choisie[1] + case[1]] in bateau.liste_cases:
+            valide = True
+        if  [case_choisie[0] + case[0], case_choisie[1] + case[1]] in appartenance_bateau:
+            valide = False
+
+    if valide:
+        bateau.liste_cases.append(case_choisie)
     
 def Tir(x,y): #
     if (x, y) in appartenance_bateau:
