@@ -1,6 +1,2 @@
-class Bateau:
-    def __init__(self, longueur, liste_cases):
-        self.longueur = longueur
-        self.liste_cases = liste_cases
-        self.coule = False
-    
+cases = [[[(k, i), (k + 50, i), (k, i + 50), (k + 50, i + 50)] for k in range(0, 500, 50)] for i in range(0, 500, 50)]
+print(cases)
