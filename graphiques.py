@@ -1,6 +1,7 @@
 from tkinter import *
 
-bleu = '#159CDA'
+bleu_fonce = '#22155C'
+bleu_clair = '#159CDA'
 blanc = '#DDF4FF'
 rouge = '#FF5454'
 
@@ -9,6 +10,9 @@ cases = [[[(k, i), (k + 25, i), (k, i + 25), (k + 25, i + 25)] for k in range(0,
 
 appartenance_bateau_j1 = [[False for i in range(10)] for k in range(10)]
 appartenance_bateau_j2 = [[False for i in range(10)] for k in range(10)]
+
+bateaux_j1 = []
+bateaux_j2 = []
 
 class Bateau:
     def __init__(self, longueur, liste_cases, joueur):
@@ -23,19 +27,30 @@ class Bateau:
         pass
 
 
+def PlacerBateau(lon_bateau, appartenance_bateau, bateaux):
+    aire_jeu_placer.bind("<Button-1>", lambda event : PlacerCaseBateau(bateaux, event, appartenance_bateau))
+
+
+
+def PlacerCaseBateau(bateau, event, appartenance_bateau):
+
+    a, b, x1, y1, x2, y2 = IdentificationCase(event)
+    if Valide(bateau, a, b, appartenance_bateau):
+        appartenance_bateau[a][b] = True
+        Case(x1, y1, x2, y2, aire_jeu_placer, bleu_fonce)
+    
+
+
 #verification qu'une case choisie est valide 
-def Valide(bateau, case_choisie, appartenance_bateau):
-    cases_a_cote = [[1, 0], [-1,0], [0, -1], [0, 1]]
-    valide = False
-    for case in cases_a_cote:
-        if [case_choisie[0] + case[0], case_choisie[1] + case[1]] in bateau.liste_cases:
-            valide = True
-        if  (case_choisie[0] + case[0], case_choisie[1] + case[1]) in appartenance_bateau:
-            valide = False
-
-    if valide:
-        bateau.liste_cases.append(case_choisie)
-
+def Valide(bateau: list, a, b, appartenance_bateau):
+    cases_voisines = [[1, 0], [-1,0], [0, -1], [0, 1]]
+    valide = True
+    if not appartenance_bateau[a][b]:
+        for case in cases_voisines:
+            if appartenance_bateau[a + case[0]][b + case[1]] and ((a + case[0], b + case[1]) not in bateau):
+                valide = False
+    return valide
+        
 #action de tirer sur une case, comprend le cas où un bateau est touché et quand aucun n'est touché
 def Tir(event, appartenance_bateau): 
 
@@ -45,20 +60,23 @@ def Tir(event, appartenance_bateau):
         Case(x1, y1, x2, y2, aire_jeu1)
     else:
         Croix(x1, y1, x2, y2, aire_jeu1)
-    
+
+#trace une croix
 def Croix(x1, y1, x2, y2, aire_jeu):
     aire_jeu.create_line(x1, y1, x2, y2)
     aire_jeu.create_line(x1, y2, x2, y1)
 
-
+#crée la grille de base 
 def Grille(aire_jeu): #création de la grille de base
     for colonne in range(1, 10):
         aire_jeu.create_line(25 * colonne, 0, 25 * colonne, 250, fill = blanc)
         aire_jeu.create_line(0, 25 * colonne, 250, 25 * colonne, fill = blanc)
 
-def Case(x1, y1, x2, y2, aire_jeu):
-    aire_jeu.create_rectangle(x1, y1, x2, y2, fill = rouge,outline= blanc)
+#colorie une case
+def Case(x1, y1, x2, y2, aire_jeu, couleur = rouge):
+    aire_jeu.create_rectangle(x1, y1, x2, y2, fill=couleur, outline=blanc)
 
+#renvoie la case sur laquelle on clique et ses coordonnées sur le canvas
 def IdentificationCase(event):
     clic = (event.x,event.y)
     coord = 0
@@ -80,13 +98,33 @@ def IdentificationCase(event):
 appartenance_bateau_j1[2][3] = True
 appartenance_bateau_j1[9][9] = True
 
+fen = Tk()
+
+aire_jeu_placer = Canvas(fen, width = 250, height = 250, bg = bleu_clair)
+aire_jeu_placer.pack(side = LEFT, padx = 10, pady = 10)
+Grille(aire_jeu_placer)
+
+bateau2 = Button(text="Torpilleur (2 cases)", command= lambda: PlacerBateau(2, appartenance_bateau, bateaux))
+bateau3s = Button(text="Sous-marin (3 cases)", command= lambda: PlacerBateau(3))
+bateau3c = Button(text="Contre-torpilleur (3 cases)", command= lambda: PlacerBateau(3))
+bateau4 = Button(text="Croiseur (4 cases)", command= lambda: PlacerBateau(4))
+bateau5 = Button(text="Porte-avion (5 cases)", command= lambda: PlacerBateau(5))
+bateau2.pack()
+bateau3s.pack()
+bateau3c.pack()
+bateau4.pack()
+bateau5.pack()
+
+
+fen.mainloop()
+
 
 fen = Tk()
 
-aire_jeu1 = Canvas(fen, width = 249, height = 249, bg = bleu)
-aire_jeu1.pack(side = LEFT, padx = 10, pady = 10)
-aire_jeu2 = Canvas(fen, width = 249, height = 249, bg = bleu)
-aire_jeu2.pack(side = RIGHT, padx = 10, pady = 10)
+aire_jeu1 = Canvas(fen, width=250, height=250, bg=bleu_clair)
+aire_jeu1.pack(side=LEFT, padx=10, pady=10)
+aire_jeu2 = Canvas(fen, width=250, height=250, bg=bleu_clair)
+aire_jeu2.pack(side=RIGHT, padx=10, pady=10)
 Grille(aire_jeu1)
 Grille(aire_jeu2)
 aire_jeu1.bind("<Button-1>", lambda event : Tir(event, appartenance_bateau_j1))
