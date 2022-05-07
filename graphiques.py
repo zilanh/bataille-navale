@@ -27,12 +27,14 @@ class Bateau:
         pass
 
 
-def PlacerBateau(lon_bateau, appartenance_bateau, bateaux):
-    aire_jeu_placer.bind("<Button-1>", lambda event : PlacerCaseBateau(bateaux, event, appartenance_bateau))
+def PlacerBateau(lon_bateau, appartenance_bateau, bateaux,aire_jeu_placer, bouton):
+    
+    aire_jeu_placer.bind("<Button-1>", lambda event : PlacerCaseBateau(bateaux, event, appartenance_bateau, aire_jeu_placer, lon_bateau, bouton))
+    
 
 
 
-def PlacerCaseBateau(bateau, event, appartenance_bateau):
+def PlacerCaseBateau(bateau, event, appartenance_bateau,aire_jeu_placer, lon_bateau, bouton):
 
     a, b, x1, y1, x2, y2 = IdentificationCase(event)
     if Valide(bateau, a, b, appartenance_bateau):
@@ -43,12 +45,13 @@ def PlacerCaseBateau(bateau, event, appartenance_bateau):
 
 #verification qu'une case choisie est valide 
 def Valide(bateau: list, a, b, appartenance_bateau):
-    cases_voisines = [[1, 0], [-1,0], [0, -1], [0, 1]]
-    valide = True
+    cases_voisines = [[a + 1, b], [a - 1, b], [a, b - 1], [a, b + 1]]
+    valide = True 
     if not appartenance_bateau[a][b]:
         for case in cases_voisines:
-            if appartenance_bateau[a + case[0]][b + case[1]] and ((a + case[0], b + case[1]) not in bateau):
-                valide = False
+            if case[0] >= 0 and case[0] <= 9 and case[1] >= 0 and case[0] <= 9: #vérification que la case voisine appartient à la grille
+                if appartenance_bateau[case[0]][case[1]] and ((case[0], case[1]) not in bateau):
+                    valide = False
     return valide
         
 #action de tirer sur une case, comprend le cas où un bateau est touché et quand aucun n'est touché
@@ -98,25 +101,29 @@ def IdentificationCase(event):
 appartenance_bateau_j1[2][3] = True
 appartenance_bateau_j1[9][9] = True
 
-fen = Tk()
+def EtapePlacerBateaux(appartenance_bateau, bateaux):
+    fen = Tk()
 
-aire_jeu_placer = Canvas(fen, width = 250, height = 250, bg = bleu_clair)
-aire_jeu_placer.pack(side = LEFT, padx = 10, pady = 10)
-Grille(aire_jeu_placer)
+    aire_jeu_placer = Canvas(fen, width = 250, height = 250, bg = bleu_clair)
+    aire_jeu_placer.pack(side = LEFT, padx = 10, pady = 10)
+    Grille(aire_jeu_placer)
 
-bateau2 = Button(text="Torpilleur (2 cases)", command= lambda: PlacerBateau(2, appartenance_bateau, bateaux))
-bateau3s = Button(text="Sous-marin (3 cases)", command= lambda: PlacerBateau(3))
-bateau3c = Button(text="Contre-torpilleur (3 cases)", command= lambda: PlacerBateau(3))
-bateau4 = Button(text="Croiseur (4 cases)", command= lambda: PlacerBateau(4))
-bateau5 = Button(text="Porte-avion (5 cases)", command= lambda: PlacerBateau(5))
-bateau2.pack()
-bateau3s.pack()
-bateau3c.pack()
-bateau4.pack()
-bateau5.pack()
+    bateau2 = Button(text="Torpilleur (2 cases)", command= lambda: PlacerBateau(2, appartenance_bateau, bateaux, aire_jeu_placer, bateau2))
+    bateau3s = Button(text="Sous-marin (3 cases)", command= lambda: PlacerBateau(3, appartenance_bateau, bateaux,aire_jeu_placer, bateau3s))
+    bateau3c = Button(text="Contre-torpilleur (3 cases)", command= lambda: PlacerBateau(3, appartenance_bateau, bateaux,aire_jeu_placer, bateau3c))
+    bateau4 = Button(text="Croiseur (4 cases)", command= lambda: PlacerBateau(4, appartenance_bateau, bateaux,aire_jeu_placer, bateau4))
+    bateau5 = Button(text="Porte-avion (5 cases)", command= lambda: PlacerBateau(5, appartenance_bateau, bateaux,aire_jeu_placer, bateau5))
+    bateau2.pack()
+    bateau3s.pack()
+    bateau3c.pack()
+    bateau4.pack()
+    bateau5.pack()
 
 
-fen.mainloop()
+    fen.mainloop()
+
+EtapePlacerBateaux(appartenance_bateau_j1, bateaux_j1)
+EtapePlacerBateaux(appartenance_bateau_j2, bateaux_j2)
 
 
 fen = Tk()
