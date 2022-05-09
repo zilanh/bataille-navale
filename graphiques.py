@@ -1,3 +1,4 @@
+from lib2to3.pgen2 import grammar
 from tkinter import *
 
 bleu_fonce = '#22155C'
@@ -10,6 +11,9 @@ cases = [[[(k, i), (k + 25, i), (k, i + 25), (k + 25, i + 25)] for k in range(0,
 
 appartenance_bateau_j1 = [[False for i in range(10)] for k in range(10)]
 appartenance_bateau_j2 = [[False for i in range(10)] for k in range(10)]
+
+grille_tir_j1 = [[False for i in range(10)] for k in range(10)]
+grille_tir_j2 = [[False for i in range(10)] for k in range(10)]
 
 bateaux_j1 = [[] for i in range(5)]
 bateaux_j2 = [[] for i in range(5)]
@@ -31,12 +35,12 @@ def PlacerBateau(lon_bateau, appartenance_bateau, bateaux,aire_jeu_placer, bouto
     global COMPTEURCASESPLACEES
     COMPTEURCASESPLACEES = 0
     bouton.destroy()
-    aire_jeu_placer.bind("<Button-1>", lambda event : PlacerCaseBateau(bateaux, event, appartenance_bateau, aire_jeu_placer, lon_bateau, bouton, fen))
+    aire_jeu_placer.bind("<Button-1>", lambda event : PlacerCaseBateau(bateaux, event, appartenance_bateau, aire_jeu_placer, lon_bateau, fen))
     
 
 
 
-def PlacerCaseBateau(bateaux, event, appartenance_bateau,aire_jeu_placer, lon_bateau, bouton, fen):
+def PlacerCaseBateau(bateaux, event, appartenance_bateau,aire_jeu_placer, lon_bateau, fen):
     global COMPTEURCASESPLACEES
     global COMPTEURBATEAU
     bateau = bateaux[COMPTEURBATEAU - 1]
