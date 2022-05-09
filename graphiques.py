@@ -28,19 +28,17 @@ class Bateau:
 
 
 def PlacerBateau(lon_bateau, appartenance_bateau, bateaux,aire_jeu_placer, bouton,fen):
+    global COMPTEURCASESPLACEES
+    COMPTEURCASESPLACEES = 0
+    bouton.destroy()
     aire_jeu_placer.bind("<Button-1>", lambda event : PlacerCaseBateau(bateaux, event, appartenance_bateau, aire_jeu_placer, lon_bateau, bouton, fen))
     
 
 
 
-def PlacerCaseBateau(bateaux, event, appartenance_bateau,aire_jeu_placer, lon_bateau, bouton, fen, lon_courante):
-    if lon_courante == lon_bateau:
-            bouton.destroy()
-            global COMPTEURBATEAU
-            COMPTEURBATEAU += 1
-            if COMPTEURBATEAU == 5:
-                fen.destroy()
-    lon_courante = 0
+def PlacerCaseBateau(bateaux, event, appartenance_bateau,aire_jeu_placer, lon_bateau, bouton, fen):
+    global COMPTEURCASESPLACEES
+    global COMPTEURBATEAU
     bateau = bateaux[COMPTEURBATEAU - 1]
     a, b, x1, y1, x2, y2 = IdentificationCase(event)
 
@@ -48,7 +46,14 @@ def PlacerCaseBateau(bateaux, event, appartenance_bateau,aire_jeu_placer, lon_ba
         appartenance_bateau[a][b] = True
         bateau.append((a,b))
         Case(x1, y1, x2, y2, aire_jeu_placer, bleu_fonce)
-        lon_courante += 1
+        COMPTEURCASESPLACEES += 1
+    if COMPTEURCASESPLACEES == lon_bateau:
+            
+            
+            COMPTEURBATEAU += 1
+            aire_jeu_placer.unbind("<Button-1>")
+            if COMPTEURBATEAU == 5:
+                fen.destroy()
 
     
 
