@@ -25,7 +25,6 @@ def PlacerBateau(lon_bateau, appartenance_bateau, bateaux,aire_jeu_placer, bouto
     global COMPTEURCASESPLACEES
     COMPTEURCASESPLACEES = 0
     bateau = bateaux[COMPTEURBATEAU]
-    print(bateaux)
     bouton.destroy()
     aire_jeu_placer.bind("<Button-1>", lambda event : PlacerCaseBateau(bateau, event, appartenance_bateau, aire_jeu_placer, lon_bateau, fen))
     
