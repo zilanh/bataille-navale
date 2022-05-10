@@ -8,7 +8,7 @@ taille_case = 50
 taille_grille = taille_case * 10
 
 
-cases = [[[(k, i), (k + taille_case, i), (k, i + taille_case), (k + taille_case, i + taille_case)] for k in range(0, taille_case, taille_case)] for i in range(0, taille_grille, taille_case)]
+cases = [[[(k, i), (k + taille_case, i), (k, i + taille_case), (k + taille_case, i + taille_case)] for k in range(0, taille_grille, taille_case)] for i in range(0, taille_grille, taille_case)]
 
 appartenance_bateau_j1 = [[False for i in range(10)] for k in range(10)]
 appartenance_bateau_j2 = [[False for i in range(10)] for k in range(10)]
