@@ -118,7 +118,7 @@ def IdentificationCase(event):
 
     return a, b, x1, y1, x2, y2
 
-
+ 
 
 def EtapePlacerBateaux(appartenance_bateau, bateaux):
     global COMPTEURBATEAU 
