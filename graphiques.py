@@ -118,6 +118,21 @@ def IdentificationCase(event):
 
     return a, b, x1, y1, x2, y2
 
+def Redessiner(ton_appartenance_bateau, autre_appartenance, tes_tirs, autres_tirs, aire_jeu_gauche, aire_jeu_droite):
+    for a in range(10):
+        for b in range(10):
+            if ton_appartenance_bateau[a][b]:
+                Case(b * taille_case, a * taille_case,(b + 1) * taille_case, (a + 1), aire_jeu_droite, bleu_fonce)
+    for c in range(10):
+        for d in range(10):
+            if tes_tirs[c][d] and autre_appartenance:
+                Case(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1), aire_jeu_gauche)
+            elif tes_tirs[c][d]:
+                Croix(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1), aire_jeu_gauche)
+    for e in range(10):
+        for f in range(10):
+            if autres_tirs[e][f]:
+                Croix(f * taille_case, e * taille_case,(f + 1) * taille_case, (e + 1), aire_jeu_droite)
 
 
 def EtapePlacerBateaux(appartenance_bateau, bateaux):
