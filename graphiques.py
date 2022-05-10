@@ -1,13 +1,14 @@
-from lib2to3.pgen2 import grammar
 from tkinter import *
 
 bleu_fonce = '#22155C'
 bleu_clair = '#159CDA'
 blanc = '#DDF4FF'
 rouge = '#FF5454'
+taille_case = 50
+taille_grille = taille_case * 10
 
 
-cases = [[[(k, i), (k + 25, i), (k, i + 25), (k + 25, i + 25)] for k in range(0, 250, 25)] for i in range(0, 250, 25)]
+cases = [[[(k, i), (k + taille_case, i), (k, i + taille_case), (k + taille_case, i + taille_case)] for k in range(0, taille_case, taille_case)] for i in range(0, taille_grille, taille_case)]
 
 appartenance_bateau_j1 = [[False for i in range(10)] for k in range(10)]
 appartenance_bateau_j2 = [[False for i in range(10)] for k in range(10)]
@@ -91,8 +92,8 @@ def Croix(x1, y1, x2, y2, aire_jeu):
 #crée la grille de base 
 def Grille(aire_jeu): #création de la grille de base
     for colonne in range(1, 10):
-        aire_jeu.create_line(25 * colonne, 0, 25 * colonne, 250, fill = blanc)
-        aire_jeu.create_line(0, 25 * colonne, 250, 25 * colonne, fill = blanc)
+        aire_jeu.create_line(taille_case * colonne, 0, taille_case * colonne, taille_grille, fill = blanc)
+        aire_jeu.create_line(0, taille_case * colonne, taille_grille, taille_case * colonne, fill = blanc)
 
 #colorie une case
 def Case(x1, y1, x2, y2, aire_jeu, couleur = rouge):
@@ -124,7 +125,7 @@ def EtapePlacerBateaux(appartenance_bateau, bateaux):
     COMPTEURBATEAU = 0
     fen = Tk()
 
-    aire_jeu_placer = Canvas(fen, width = 250, height = 250, bg = bleu_clair)
+    aire_jeu_placer = Canvas(fen, width = taille_grille, height = taille_grille, bg = bleu_clair)
     aire_jeu_placer.pack(side = LEFT, padx = 10, pady = 10)
     Grille(aire_jeu_placer)
 
@@ -149,9 +150,9 @@ EtapePlacerBateaux(appartenance_bateau_j2, bateaux_j2)
 
 fen = Tk()
 
-aire_jeu1 = Canvas(fen, width=250, height=250, bg=bleu_clair)
+aire_jeu1 = Canvas(fen, width=taille_grille, height=taille_grille, bg=bleu_clair)
 aire_jeu1.pack(side=LEFT, padx=10, pady=10)
-aire_jeu2 = Canvas(fen, width=250, height=250, bg=bleu_clair)
+aire_jeu2 = Canvas(fen, width=taille_grille, height=taille_grille, bg=bleu_clair)
 aire_jeu2.pack(side=RIGHT, padx=10, pady=10)
 Grille(aire_jeu1)
 Grille(aire_jeu2)
