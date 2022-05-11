@@ -70,8 +70,8 @@ def Valide(bateau: list, a, b, appartenance_bateau):
                 if case[0] >= 0 and case[0] <= 9 and case[1] >= 0 and case[1] <= 9:
                     if (not case in cases_voisines_cote) and case in bateau:
                         valide_adjacent = False
-                    if case in cases_voisines_cote and case in bateau:
-                        une_case_en_contact = True
+                    
+                    une_case_en_contact = une_case_en_contact or (case in cases_voisines_cote and case in bateau)
             valide_adjacent = valide_adjacent and une_case_en_contact
                     
                     
