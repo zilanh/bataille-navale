@@ -125,6 +125,7 @@ def IdentificationCase(event):
 
     return a, b, x1, y1, x2, y2
 
+ 
 def Redessiner(ton_appartenance_bateau, autre_appartenance, tes_tirs, autres_tirs, aire_jeu_gauche, aire_jeu_droite):
     for a in range(10):
         for b in range(10):
