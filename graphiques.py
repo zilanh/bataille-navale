@@ -94,7 +94,7 @@ def Tir(event, appartenance_bateau, grille_tir):
 #trace une croix
 def Croix(x1, y1, x2, y2, aire_jeu):
     aire_jeu.create_line(x1, y1, x2, y2)
-    aire_jeu.create_line(x1, y2, x2, y1)
+    aire_jeu.create_line(x1, y2, x2, y1)  
 
 #crée la grille de base 
 def Grille(aire_jeu): #création de la grille de base
