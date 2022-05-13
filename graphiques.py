@@ -144,6 +144,7 @@ def IdentificationCase(event):
     coord = 0
     a = 0
     b = 0
+    #tant qu'on ne trouve pas les coordonnées on augmente l'absisse et l'ordonnée pour trouver la case
     while coord == 0:
         if clic[1] > cases[a][b][-1][-1]:
             a += 1
@@ -157,18 +158,21 @@ def IdentificationCase(event):
 
     return a, b, x1, y1, x2, y2
 
- 
+ #fonction pour afficher les coups précédents lors du changement de tour 
 def Redessiner(ton_appartenance_bateau, autre_appartenance, tes_tirs, autres_tirs, aire_jeu_gauche, aire_jeu_droite):
+    #on redessine les bateaux du joueur
     for a in range(10):
         for b in range(10):
             if ton_appartenance_bateau[a][b]:
                 Case(b * taille_case, a * taille_case,(b + 1) * taille_case, (a + 1), aire_jeu_droite, bleu_fonce)
+    #on redessine les tirs du joueur
     for c in range(10):
         for d in range(10):
             if tes_tirs[c][d] and autre_appartenance:
                 Case(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1), aire_jeu_gauche)
             elif tes_tirs[c][d]:
                 Croix(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1), aire_jeu_gauche)
+    #on redessine les tirs de l'autre joueur
     for e in range(10):
         for f in range(10):
             if autres_tirs[e][f]:
