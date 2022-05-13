@@ -90,15 +90,17 @@ def Valide(bateau: list, a, b, appartenance_bateau):
 
 #fonction pour annuler le placement d'une case d'un bateau
 def Retour(bateaux, appartenance_bateau, aire_jeu_placer, fen):
+    global COMPTEURCASESPLACEES
     i = 0
     if len(bateaux[-1]) > 0:
         i = 4
     else: 
         while len(bateaux[i + 1]) > 0:
             i += 1
-    if COMPTEURCASESPLACEES == 0:
+    if COMPTEURCASESPLACEES == 0 or len(bateaux[0]) == 0:
         return
     
+    COMPTEURCASESPLACEES += -1
     Case(bateaux[i][-1][1] * taille_case, bateaux[i][-1][0] * taille_case, (bateaux[i][-1][1] + 1) * taille_case, (bateaux[i][-1][0] + 1) * taille_case, aire_jeu_placer, couleur = bleu_clair)
     appartenance_bateau[bateaux[i][-1][0]][bateaux[i][-1][1]] = False
     del bateaux[i][-1]
