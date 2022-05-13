@@ -22,6 +22,12 @@ grille_tir_j2 = [[False for i in range(10)] for k in range(10)]
 bateaux_j1 = [[] for i in range(5)]
 bateaux_j2 = [[] for i in range(5)]
 
+#variables pr déterminer le nombre de bateaux et le tour
+"""
+coule_j1 = 0
+coule_j2 = 0
+nbcasestotal = 17
+"""
 
 #fonction pour placer un bateau
 def PlacerBateau(lon_bateau, appartenance_bateau, bateaux,aire_jeu_placer, bouton,fen):
