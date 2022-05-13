@@ -10,17 +10,20 @@ taille_grille = taille_case * 10
 
 cases = [[[(k, i), (k + taille_case, i), (k, i + taille_case), (k + taille_case, i + taille_case)] for k in range(0, taille_grille, taille_case)] for i in range(0, taille_grille, taille_case)]
 
+#représentation des bateaux par True/False
 appartenance_bateau_j1 = [[False for i in range(10)] for k in range(10)]
 appartenance_bateau_j2 = [[False for i in range(10)] for k in range(10)]
 
+#représentation des cases sur lesquelles chaque joueur a tiré par True/False
 grille_tir_j1 = [[False for i in range(10)] for k in range(10)]
 grille_tir_j2 = [[False for i in range(10)] for k in range(10)]
 
+#tableau contenant les cases appartenant à chaque bateau
 bateaux_j1 = [[] for i in range(5)]
 bateaux_j2 = [[] for i in range(5)]
 
 
-
+#fonction pour placer un bateau
 def PlacerBateau(lon_bateau, appartenance_bateau, bateaux,aire_jeu_placer, bouton,fen):
     global COMPTEURCASESPLACEES
     COMPTEURCASESPLACEES = 0
@@ -28,21 +31,8 @@ def PlacerBateau(lon_bateau, appartenance_bateau, bateaux,aire_jeu_placer, bouto
     bouton.destroy()
     aire_jeu_placer.bind("<Button-1>", lambda event : PlacerCaseBateau(bateau, event, appartenance_bateau, aire_jeu_placer, lon_bateau, fen))
     
-def Retour(bateaux, appartenance_bateau, aire_jeu_placer, fen):
-    i = 0
-    if len(bateaux[-1]) > 0:
-        i = 4
-    else: 
-        while len(bateaux[i + 1]) > 0:
-            i += 1
-    if COMPTEURCASESPLACEES == 0:
-        return
-    
-    Case(bateaux[i][-1][1] * taille_case, bateaux[i][-1][0] * taille_case, (bateaux[i][-1][1] + 1) * taille_case, (bateaux[i][-1][0] + 1) * taille_case, aire_jeu_placer, couleur = bleu_clair)
-    appartenance_bateau[bateaux[i][-1][0]][bateaux[i][-1][1]] = False
-    del bateaux[i][-1]
 
-
+#fonction pour placer une case d'un bateau
 def PlacerCaseBateau(bateau, event, appartenance_bateau,aire_jeu_placer, lon_bateau, fen):
     global COMPTEURCASESPLACEES
     global COMPTEURBATEAU
@@ -54,12 +44,13 @@ def PlacerCaseBateau(bateau, event, appartenance_bateau,aire_jeu_placer, lon_bat
         bateau.append((a,b))
         Case(x1, y1, x2, y2, aire_jeu_placer, bleu_fonce)
         COMPTEURCASESPLACEES += 1
+        
+    #le bateau est fini
     if COMPTEURCASESPLACEES == lon_bateau:
-            
-            
             COMPTEURBATEAU += 1
             aire_jeu_placer.unbind("<Button-1>")
-            if COMPTEURBATEAU == 5:
+            
+            if COMPTEURBATEAU == 5: #si tous les bateaux sont placés, ferme la fenêtre
                 fen.destroy()
 
     
@@ -72,11 +63,16 @@ def Valide(bateau: list, a, b, appartenance_bateau):
     valide_autre_bateau = True 
     valide_adjacent = True
     une_case_en_contact = False
-    if not appartenance_bateau[a][b]:
+    
+    if not appartenance_bateau[a][b]: #verification que la case choisie ne contient pas déjà un bateau
+        
+        #vérification qu'il n'y a pas d'autre bateau à côté
         for case in cases_voisines_cote:
             if case[0] >= 0 and case[0] <= 9 and case[1] >= 0 and case[1] <= 9: #vérification que la case voisine appartient à la grille
                 if appartenance_bateau[case[0]][case[1]] and ((case[0], case[1]) not in bateau): #vérification que la case voisine ne contient pas d'autre bateau 
                     valide_autre_bateau = False
+                    
+        #vérification que la case choise est adjacente a une case d'une même bateau et que le bateau est en ligne droite
         if len(bateau) != 0:
             for case in cases_voisines_partout:
                 if case[0] >= 0 and case[0] <= 9 and case[1] >= 0 and case[1] <= 9:
@@ -91,15 +87,31 @@ def Valide(bateau: list, a, b, appartenance_bateau):
 
     
     return valide_autre_bateau and valide_adjacent
-        
-#action de tirer sur une case, comprend le cas où un bateau est touché et quand aucun n'est touché
+
+#fonction pour annuler le placement d'une case d'un bateau
+def Retour(bateaux, appartenance_bateau, aire_jeu_placer, fen):
+    i = 0
+    if len(bateaux[-1]) > 0:
+        i = 4
+    else: 
+        while len(bateaux[i + 1]) > 0:
+            i += 1
+    if COMPTEURCASESPLACEES == 0:
+        return
+    
+    Case(bateaux[i][-1][1] * taille_case, bateaux[i][-1][0] * taille_case, (bateaux[i][-1][1] + 1) * taille_case, (bateaux[i][-1][0] + 1) * taille_case, aire_jeu_placer, couleur = bleu_clair)
+    appartenance_bateau[bateaux[i][-1][0]][bateaux[i][-1][1]] = False
+    del bateaux[i][-1]
+
+#action de tirer sur une case, comprend le cas où un bateau est touché et quand aucun n'est touché (pas finie)
 def Tir(event, appartenance_bateau, grille_tir): 
 
     a, b, x1, y1, x2, y2 = IdentificationCase(event)
     if not grille_tir[a][b]:
-        if appartenance_bateau[a][b]:
+        if appartenance_bateau[a][b]: #un bateau est touché
             Case(x1, y1, x2, y2, aire_jeu1)
-        else:
+            
+        else:   #aucun bateau n'est touché
             Croix(x1, y1, x2, y2, aire_jeu1)
         grille_tir[a][b] = True
 
@@ -109,7 +121,7 @@ def Croix(x1, y1, x2, y2, aire_jeu):
     aire_jeu.create_line(x1, y2, x2, y1)
 
 #crée la grille de base 
-def Grille(aire_jeu): #création de la grille de base
+def Grille(aire_jeu): 
     for colonne in range(1, 10):
         aire_jeu.create_line(taille_case * colonne, 0, taille_case * colonne, taille_grille, fill = blanc)
         aire_jeu.create_line(0, taille_case * colonne, taille_grille, taille_case * colonne, fill = blanc)
@@ -179,7 +191,7 @@ def EtapePlacerBateaux(appartenance_bateau, bateaux):
 
     fen.mainloop()
     
-
+#placement des bateaux pour les deux joueurs
 EtapePlacerBateaux(appartenance_bateau_j1, bateaux_j1)
 EtapePlacerBateaux(appartenance_bateau_j2, bateaux_j2)
 
