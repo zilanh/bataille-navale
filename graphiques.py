@@ -209,3 +209,37 @@ Grille(aire_jeu2)
 aire_jeu1.bind("<Button-1>", lambda event : Tir(event, appartenance_bateau_j1, grille_tir_j1))
 
 fen.mainloop()
+"""
+def Tour(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2):
+    tour = 0
+    
+    while coule_j1 < nbcasestotal and coule_j2 < nbcasestotal:
+        quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_bateau_j1,appartenance_bateau_j2, tour%2)
+        tour+=1
+        
+    if coule_j1 == nbcasestotal:
+        fen.destroy()
+        fen = Tk()
+        tabFin = Canvas(fen, width = , height = )
+        texte = 
+        
+    elif coule_j2 == nbcasestotal:
+        fen.destroy()
+        fen = Tk()
+        tabFin = Canvas(fen, width = , height = )
+        texte =
+        
+def quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_bateau_j1,appartenance_bateau_j2, joueur):
+        fen = Tk()
+
+        aire_jeu1 = Canvas(fen, width = taille_grille, height = taille_grille, bg = bleu_clair)
+        aire_jeu1.pack(side=LEFT, padx = 10, pady = 10)
+        aire_jeu2 = Canvas(fen, width = taille_grille, height = taille_grille, bg = bleu_clair)
+        aire_jeu2.pack(side = RIGHT, padx = 10, pady = 10)
+        Grille(aire_jeu1)
+        Grille(aire_jeu2)
+        aire_jeu1.bind("<Button-1>", lambda event : Tir(event, appartenance_bateau_j1, grille_tir_j1, joueur))
+        
+        fen.mainloop()
+
+"""  
