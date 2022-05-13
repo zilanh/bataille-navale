@@ -23,11 +23,11 @@ bateaux_j1 = [[] for i in range(5)]
 bateaux_j2 = [[] for i in range(5)]
 
 #variables pr déterminer le nombre de bateaux et le tour
-"""
+
 coule_j1 = 0
 coule_j2 = 0
 nbcasestotal = 17
-"""
+
 
 #fonction pour placer un bateau
 def PlacerBateau(lon_bateau, appartenance_bateau, bateaux,aire_jeu_placer, bouton,fen):
@@ -61,7 +61,6 @@ def PlacerCaseBateau(bateau, event, appartenance_bateau,aire_jeu_placer, lon_bat
 
     
 
-
 #verification qu'une case choisie est valide 
 def Valide(bateau: list, a, b, appartenance_bateau):
     cases_voisines_cote = [(a + 1, b), (a - 1, b), (a, b - 1), (a, b + 1)]
@@ -94,6 +93,8 @@ def Valide(bateau: list, a, b, appartenance_bateau):
     
     return valide_autre_bateau and valide_adjacent
 
+
+
 #fonction pour annuler le placement d'une case d'un bateau
 def Retour(bateaux, appartenance_bateau, aire_jeu_placer, fen):
     global COMPTEURCASESPLACEES
@@ -111,6 +112,8 @@ def Retour(bateaux, appartenance_bateau, aire_jeu_placer, fen):
     appartenance_bateau[bateaux[i][-1][0]][bateaux[i][-1][1]] = False
     del bateaux[i][-1]
 
+    
+    
 #action de tirer sur une case, comprend le cas où un bateau est touché et quand aucun n'est touché (pas finie)
 def Tir(event, appartenance_bateau, grille_tir): 
 
@@ -119,25 +122,38 @@ def Tir(event, appartenance_bateau, grille_tir):
         if appartenance_bateau[a][b]: #un bateau est touché
             Case(x1, y1, x2, y2, aire_jeu1)
             
+            if joueur == 0:
+                coule_j1 += [(x1, y1, x2, y2)]
+            elif joueur == 1:
+                coule_j2 += [(x1, y1, x2, y2)]
+            
         else:   #aucun bateau n'est touché
             Croix(x1, y1, x2, y2, aire_jeu1)
         grille_tir[a][b] = True
 
+        
+        
 #trace une croix
 def Croix(x1, y1, x2, y2, aire_jeu):
     aire_jeu.create_line(x1, y1, x2, y2)
     aire_jeu.create_line(x1, y2, x2, y1)
 
+    
+    
 #crée la grille de base 
 def Grille(aire_jeu): 
     for colonne in range(1, 10):
         aire_jeu.create_line(taille_case * colonne, 0, taille_case * colonne, taille_grille, fill = blanc)
         aire_jeu.create_line(0, taille_case * colonne, taille_grille, taille_case * colonne, fill = blanc)
 
+        
+        
 #colorie une case
 def Case(x1, y1, x2, y2, aire_jeu, couleur = rouge):
     aire_jeu.create_rectangle(x1, y1, x2, y2, fill=couleur, outline=blanc)
 
+    
+    
 #renvoie la case sur laquelle on clique et ses coordonnées sur le canvas
 def IdentificationCase(event):
     clic = (event.x,event.y)
@@ -158,27 +174,35 @@ def IdentificationCase(event):
 
     return a, b, x1, y1, x2, y2
 
+
+
  #fonction pour afficher les coups précédents lors du changement de tour 
 def Redessiner(ton_appartenance_bateau, autre_appartenance, tes_tirs, autres_tirs, aire_jeu_gauche, aire_jeu_droite):
+    
     #on redessine les bateaux du joueur
     for a in range(10):
         for b in range(10):
+            
             if ton_appartenance_bateau[a][b]:
                 Case(b * taille_case, a * taille_case,(b + 1) * taille_case, (a + 1), aire_jeu_droite, bleu_fonce)
+                
     #on redessine les tirs du joueur
     for c in range(10):
         for d in range(10):
+            
             if tes_tirs[c][d] and autre_appartenance:
                 Case(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1), aire_jeu_gauche)
+                
             elif tes_tirs[c][d]:
                 Croix(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1), aire_jeu_gauche)
+                
     #on redessine les tirs de l'autre joueur
     for e in range(10):
         for f in range(10):
             if autres_tirs[e][f]:
                 Croix(f * taille_case, e * taille_case,(f + 1) * taille_case, (e + 1), aire_jeu_droite)
 
-
+#fonction pour qu'un joueur puisse placer ses bateaux
 def EtapePlacerBateaux(appartenance_bateau, bateaux):
     global COMPTEURBATEAU 
     COMPTEURBATEAU = 0
@@ -194,19 +218,58 @@ def EtapePlacerBateaux(appartenance_bateau, bateaux):
     bateau3c = Button(text="Contre-torpilleur (3 cases)", command= lambda: PlacerBateau(3, appartenance_bateau, bateaux,aire_jeu_placer, bateau3c, fen))
     bateau4 = Button(text="Croiseur (4 cases)", command= lambda: PlacerBateau(4, appartenance_bateau, bateaux,aire_jeu_placer, bateau4, fen))
     bateau5 = Button(text="Porte-avion (5 cases)", command= lambda: PlacerBateau(5, appartenance_bateau, bateaux,aire_jeu_placer, bateau5, fen))
+    
     bateau2.pack()
     bateau3s.pack()
     bateau3c.pack()
     bateau4.pack()
     bateau5.pack()
 
-
     fen.mainloop()
+    
+    
+    
+#fonction pour déterminer s'il faut encore jouer
+def Tour(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, coule_j1, coule_j2):
+    tour = 0
+    
+    #on joue tant que toutes les cases "bateau" n'ont pas été coulées
+    while coule_j1 < nbcasestotal and coule_j2 < nbcasestotal:
+        quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_bateau_j1,appartenance_bateau_j2, tour%2)
+        tour+=1
+    
+    #lorsqu'elles l'ont été pour un joueur, fin du jeu
+    if coule_j1 == nbcasestotal:
+        return Fin 
+        
+    elif coule_j2 == nbcasestotal:
+        return Fin
+    
+    
+    
+#fonction pour dessiner les deux grilles du joueur dont c'est le tour. 
+def quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_bateau_j1,appartenance_bateau_j2, joueur, ton_appartenance_bateau, autre_appartenance):
+        fen = Tk()
+        aire_jeu1 = Canvas(fen, width = taille_grille, height = taille_grille, bg = bleu_clair)
+        aire_jeu1.pack(side=LEFT, padx = 10, pady = 10)
+        aire_jeu2 = Canvas(fen, width = taille_grille, height = taille_grille, bg = bleu_clair)
+        aire_jeu2.pack(side = RIGHT, padx = 10, pady = 10)
+        Grille(aire_jeu1)
+        Grille(aire_jeu2)
+        
+        Redessiner(ton_appartenance_bateau, autre_appartenance, tes_tirs, autres_tirs, aire_jeu_gauche, aire_jeu_droite)
+        aire_jeu1.bind("<Button-1>", lambda event : Tir(event, appartenance_bateau_j1, grille_tir_j1, joueur, coule_j1, coule_j2))
+        
+        fen.mainloop()
+        
+        
     
 #placement des bateaux pour les deux joueurs
 EtapePlacerBateaux(appartenance_bateau_j1, bateaux_j1)
 EtapePlacerBateaux(appartenance_bateau_j2, bateaux_j2)
 
+#appel des tours (il se peut que cette fonction devienne récursive)
+Tour(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, coule_j1, coule_j2)
 
 fen = Tk()
 
@@ -219,37 +282,4 @@ Grille(aire_jeu2)
 aire_jeu1.bind("<Button-1>", lambda event : Tir(event, appartenance_bateau_j1, grille_tir_j1))
 
 fen.mainloop()
-"""
-def Tour(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2):
-    tour = 0
-    
-    while coule_j1 < nbcasestotal and coule_j2 < nbcasestotal:
-        quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_bateau_j1,appartenance_bateau_j2, tour%2)
-        tour+=1
-        
-    if coule_j1 == nbcasestotal:
-        fen.destroy()
-        fen = Tk()
-        tabFin = Canvas(fen, width = , height = )
-        texte = 
-        
-    elif coule_j2 == nbcasestotal:
-        fen.destroy()
-        fen = Tk()
-        tabFin = Canvas(fen, width = , height = )
-        texte =
-        
-def quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_bateau_j1,appartenance_bateau_j2, joueur):
-        fen = Tk()
 
-        aire_jeu1 = Canvas(fen, width = taille_grille, height = taille_grille, bg = bleu_clair)
-        aire_jeu1.pack(side=LEFT, padx = 10, pady = 10)
-        aire_jeu2 = Canvas(fen, width = taille_grille, height = taille_grille, bg = bleu_clair)
-        aire_jeu2.pack(side = RIGHT, padx = 10, pady = 10)
-        Grille(aire_jeu1)
-        Grille(aire_jeu2)
-        aire_jeu1.bind("<Button-1>", lambda event : Tir(event, appartenance_bateau_j1, grille_tir_j1, joueur))
-        
-        fen.mainloop()
-
-"""  
