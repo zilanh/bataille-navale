@@ -159,7 +159,12 @@ def Grille(aire_jeu):
 def Case(x1, y1, x2, y2, aire_jeu, couleur = rouge):
     aire_jeu.create_rectangle(x1, y1, x2, y2, fill=couleur, outline=blanc)
 
-    
+#trouve le bateau auquel appartient une case choisie si elle appartient à un bateau
+def TrouverBateau(bateaux,case_cherchee):
+    for bateau in range(5):
+        for case in bateaux[i]:
+            if case_cherchee == case:
+                return i
     
 #renvoie la case sur laquelle on clique et ses coordonnées sur le canvas
 def IdentificationCase(event):
