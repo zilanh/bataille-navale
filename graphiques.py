@@ -199,7 +199,7 @@ def Redessiner(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, gr
 
                 if grille_tir_j2[a][b]:
                     Croix(b * taille_case, a * taille_case,(b + 1) * taille_case, (a + 1), aire_jeu_droite)
-    elif joueur==2:
+    elif joueur==0:
        for c in range(10):
             for d in range(10):
                 if appartenance_bateau_j1[c][d]:
