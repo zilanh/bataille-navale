@@ -245,25 +245,21 @@ def EtapePlacerBateaux(appartenance_bateau, bateaux, joueur):
     
     fen.mainloop()
     
-    
+    #fonction qui renvoie True si un des joueurs a tous ses bateaux coulés(la partie est finie), et False sinon (la partie continue)
+def FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2):
+    j1 = j2 = 0
+    for i in range(10):
+        for j in range(10):
+            if appartenance_bateau_j1[i][j] and not(grille_tir_j2[i][j]):
+                j1+=1
+                
+            if appartenance_bateau_j2[i][j] and not(grille_tir_j1[i][j]):
+                j2+=1
+
+    if j1==0 or j2==0:
+        return True
+    return False
    
-#fonction pour déterminer s'il faut encore jouer
-def Tour(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, coule_j1, coule_j2):
-    tour = 0
-    
-    #on joue tant que toutes les cases "bateau" n'ont pas été coulées
-    while coule_j1 < nbcasestotal and coule_j2 < nbcasestotal:
-        quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_bateau_j1,appartenance_bateau_j2, tour%2)
-        tour+=1
-    
-    #lorsqu'elles l'ont été pour un joueur, fin du jeu
-    if coule_j1 == nbcasestotal:
-        return Fin 
-        
-    elif coule_j2 == nbcasestotal:
-        return Fin
-    
-    
     
 #fonction pour dessiner les deux grilles du joueur dont c'est le tour. 
 def quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_bateau_j1,appartenance_bateau_j2, joueur, ton_appartenance_bateau, autre_appartenance):
