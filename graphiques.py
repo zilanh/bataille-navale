@@ -210,7 +210,7 @@ def Redessiner(ton_appartenance_bateau, autre_appartenance, tes_tirs, autres_tir
                 Croix(f * taille_case, e * taille_case,(f + 1) * taille_case, (e + 1), aire_jeu_droite)
 
 #fonction pour qu'un joueur puisse placer ses bateaux
-def EtapePlacerBateaux(appartenance_bateau, bateaux):
+def EtapePlacerBateaux(appartenance_bateau, bateaux, joueur):
     global COMPTEURBATEAU 
     COMPTEURBATEAU = 0
     fen = Tk()
@@ -218,6 +218,10 @@ def EtapePlacerBateaux(appartenance_bateau, bateaux):
     aire_jeu_placer = Canvas(fen, width = taille_grille, height = taille_grille, bg = bleu_clair)
     aire_jeu_placer.pack(side = LEFT, padx = 10, pady = 10)
     Grille(aire_jeu_placer)
+    
+    #affichage du nom du joueur
+    nom= Label(fen, text = "Joueur "+ str(joueur), fg = 'red')
+    nom.pack(side = TOP, pady = 10)
     
     #création des boutons pour créer les bateaux
     bateau2 = Button(text="Torpilleur (2 cases)", command= lambda: PlacerBateau(2, appartenance_bateau, bateaux, aire_jeu_placer, bateau2, fen))
@@ -274,8 +278,8 @@ def quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_b
        
     
 #placement des bateaux pour les deux joueurs
-EtapePlacerBateaux(appartenance_bateau_j1, bateaux_j1)
-EtapePlacerBateaux(appartenance_bateau_j2, bateaux_j2)
+EtapePlacerBateaux(appartenance_bateau_j1, bateaux_j1, 1)
+EtapePlacerBateaux(appartenance_bateau_j2, bateaux_j2, 2)
 
 #appel des tours (il se peut que cette fonction devienne récursive)
 #Tour(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, coule_j1, coule_j2)
