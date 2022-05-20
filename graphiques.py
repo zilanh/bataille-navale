@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri May 20 08:01:31 2022
-
-@author: collinl
-"""
 
 from tkinter import *
 
@@ -160,9 +154,9 @@ def Case(x1, y1, x2, y2, aire_jeu, couleur = rouge):
     aire_jeu.create_rectangle(x1, y1, x2, y2, fill=couleur, outline=blanc)
 
 #trouve le bateau auquel appartient une case choisie si elle appartient à un bateau
-def TrouverBateau(bateaux,case_cherchee):
+def TrouverBateau(bateaux, case_cherchee):
     for bateau in range(5):
-        for case in bateaux[i]:
+        for case in bateaux[bateau]:
             if case_cherchee == case:
                 return i
     
@@ -187,33 +181,38 @@ def IdentificationCase(event):
     return a, b, x1, y1, x2, y2
 
 
+#fonction pour afficher les coups précédents lors du changement de tour 
+def Redessiner(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2, aire_jeu_gauche, aire_jeu_droite, joueur):
 
- #fonction pour afficher les coups précédents lors du changement de tour 
-def Redessiner(ton_appartenance_bateau, autre_appartenance, tes_tirs, autres_tirs, aire_jeu_gauche, aire_jeu_droite):
-    
-    #on redessine les bateaux du joueur
-    for a in range(10):
-        for b in range(10):
-            
-            if ton_appartenance_bateau[a][b]:
-                Case(b * taille_case, a * taille_case,(b + 1) * taille_case, (a + 1), aire_jeu_droite, bleu_fonce)
-                
-    #on redessine les tirs du joueur
-    for c in range(10):
-        for d in range(10):
-            
-            if tes_tirs[c][d] and autre_appartenance:
-                Case(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1), aire_jeu_gauche)
-                
-            elif tes_tirs[c][d]:
-                Croix(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1), aire_jeu_gauche)
-                
-    #on redessine les tirs de l'autre joueur
-    for e in range(10):
-        for f in range(10):
-            if autres_tirs[e][f]:
-                Croix(f * taille_case, e * taille_case,(f + 1) * taille_case, (e + 1), aire_jeu_droite)
+    #on redessine les bateaux et tirs en fonction du joueur
+    if joueur==1:
+        for a in range(10):
+            for b in range(10):
+                if appartenance_bateau_j1[a][b]:
+                    Case(b * taille_case, a * taille_case,(b + 1) * taille_case, (a + 1), aire_jeu_droite, bleu_fonce)
 
+                if grille_tir_j1[a][b] and appartenance_bateau_j2[a][b]:
+                    Case(b * taille_case, a * taille_case,(b + 1) * taille_case, (a + 1), aire_jeu_gauche)
+
+                elif grille_tir_j1[a][b]:
+                    Croix(b * taille_case, a * taille_case,(b + 1) * taille_case, (a + 1), aire_jeu_gauche)
+
+                if grille_tir_j2[a][b]:
+                    Croix(b * taille_case, a * taille_case,(b + 1) * taille_case, (a + 1), aire_jeu_droite)
+    elif joueur==2:
+       for c in range(10):
+            for d in range(10):
+                if appartenance_bateau_j1[c][d]:
+                    Case(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1), aire_jeu_droite, bleu_fonce)
+
+                if grille_tir_j1[c][d] and appartenance_bateau_j2[c][d]:
+                    Case(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1), aire_jeu_gauche)
+                    
+                elif grille_tir_j1[c][d]:
+                    Croix(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1), aire_jeu_gauche)
+                    
+                if grille_tir_j2[c][d]:
+                    Croix(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1), aire_jeu_droite)
 #fonction pour qu'un joueur puisse placer ses bateaux
 def EtapePlacerBateaux(appartenance_bateau, bateaux, joueur):
     global COMPTEURBATEAU 
