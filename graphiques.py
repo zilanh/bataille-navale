@@ -1,3 +1,4 @@
+
 from tkinter import *
 
 bleu_fonce = '#22155C'
@@ -104,7 +105,7 @@ def Retour(bateaux, appartenance_bateau, aire_jeu_placer, fen):
     else: 
         while len(bateaux[i + 1]) > 0:
             i += 1
-    if COMPTEURCASESPLACEES == 0 or len(bateaux[0]) == 0:
+    if COMPTEURCASESPLACEES <= 0 or COMPTEURBATEAU > i:
         return
     
     COMPTEURCASESPLACEES += -1
@@ -121,12 +122,12 @@ def Tir(event, appartenance_bateau, grille_tir):
     if not grille_tir[a][b]:
         if appartenance_bateau[a][b]: #un bateau est touché
             Case(x1, y1, x2, y2, aire_jeu1)
-            
+            '''
             if joueur == 0:
                 coule_j1 += [(x1, y1, x2, y2)]
             elif joueur == 1:
                 coule_j2 += [(x1, y1, x2, y2)]
-            
+            '''
         else:   #aucun bateau n'est touché
             Croix(x1, y1, x2, y2, aire_jeu1)
         grille_tir[a][b] = True
@@ -152,7 +153,12 @@ def Grille(aire_jeu):
 def Case(x1, y1, x2, y2, aire_jeu, couleur = rouge):
     aire_jeu.create_rectangle(x1, y1, x2, y2, fill=couleur, outline=blanc)
 
-    
+#trouve le bateau auquel appartient une case choisie si elle appartient à un bateau
+def TrouverBateau(bateaux, case_cherchee):
+    for bateau in range(5):
+        for case in bateaux[bateau]:
+            if case_cherchee == case:
+                return i
     
 #renvoie la case sur laquelle on clique et ses coordonnées sur le canvas
 def IdentificationCase(event):
@@ -175,35 +181,40 @@ def IdentificationCase(event):
     return a, b, x1, y1, x2, y2
 
 
+#fonction pour afficher les coups précédents lors du changement de tour 
+def Redessiner(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2, aire_jeu_gauche, aire_jeu_droite, joueur):
 
- #fonction pour afficher les coups précédents lors du changement de tour 
-def Redessiner(ton_appartenance_bateau, autre_appartenance, tes_tirs, autres_tirs, aire_jeu_gauche, aire_jeu_droite):
-    
-    #on redessine les bateaux du joueur
-    for a in range(10):
-        for b in range(10):
-            
-            if ton_appartenance_bateau[a][b]:
-                Case(b * taille_case, a * taille_case,(b + 1) * taille_case, (a + 1), aire_jeu_droite, bleu_fonce)
-                
-    #on redessine les tirs du joueur
-    for c in range(10):
-        for d in range(10):
-            
-            if tes_tirs[c][d] and autre_appartenance:
-                Case(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1), aire_jeu_gauche)
-                
-            elif tes_tirs[c][d]:
-                Croix(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1), aire_jeu_gauche)
-                
-    #on redessine les tirs de l'autre joueur
-    for e in range(10):
-        for f in range(10):
-            if autres_tirs[e][f]:
-                Croix(f * taille_case, e * taille_case,(f + 1) * taille_case, (e + 1), aire_jeu_droite)
+    #on redessine les bateaux et tirs en fonction du joueur
+    if joueur==1:
+        for a in range(10):
+            for b in range(10):
+                if appartenance_bateau_j1[a][b]:
+                    Case(b * taille_case, a * taille_case,(b + 1) * taille_case, (a + 1), aire_jeu_droite, bleu_fonce)
 
+                if grille_tir_j1[a][b] and appartenance_bateau_j2[a][b]:
+                    Case(b * taille_case, a * taille_case,(b + 1) * taille_case, (a + 1), aire_jeu_gauche)
+
+                elif grille_tir_j1[a][b]:
+                    Croix(b * taille_case, a * taille_case,(b + 1) * taille_case, (a + 1), aire_jeu_gauche)
+
+                if grille_tir_j2[a][b]:
+                    Croix(b * taille_case, a * taille_case,(b + 1) * taille_case, (a + 1), aire_jeu_droite)
+    elif joueur==0:
+       for c in range(10):
+            for d in range(10):
+                if appartenance_bateau_j1[c][d]:
+                    Case(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1), aire_jeu_droite, bleu_fonce)
+
+                if grille_tir_j1[c][d] and appartenance_bateau_j2[c][d]:
+                    Case(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1), aire_jeu_gauche)
+                    
+                elif grille_tir_j1[c][d]:
+                    Croix(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1), aire_jeu_gauche)
+                    
+                if grille_tir_j2[c][d]:
+                    Croix(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1), aire_jeu_droite)
 #fonction pour qu'un joueur puisse placer ses bateaux
-def EtapePlacerBateaux(appartenance_bateau, bateaux):
+def EtapePlacerBateaux(appartenance_bateau, bateaux, joueur):
     global COMPTEURBATEAU 
     COMPTEURBATEAU = 0
     fen = Tk()
@@ -211,6 +222,10 @@ def EtapePlacerBateaux(appartenance_bateau, bateaux):
     aire_jeu_placer = Canvas(fen, width = taille_grille, height = taille_grille, bg = bleu_clair)
     aire_jeu_placer.pack(side = LEFT, padx = 10, pady = 10)
     Grille(aire_jeu_placer)
+    
+    #affichage du nom du joueur
+    nom= Label(fen, text = "Joueur "+ str(joueur), fg = 'red')
+    nom.pack(side = TOP, pady = 10)
     
     #création des boutons pour créer les bateaux
     bateau2 = Button(text="Torpilleur (2 cases)", command= lambda: PlacerBateau(2, appartenance_bateau, bateaux, aire_jeu_placer, bateau2, fen))
@@ -224,28 +239,27 @@ def EtapePlacerBateaux(appartenance_bateau, bateaux):
     bateau3c.pack()
     bateau4.pack()
     bateau5.pack()
-
+    
+    retour = Button(text="Retour", command= lambda : Retour(bateaux, appartenance_bateau, aire_jeu_placer, fen))
+    retour.pack()
+    
     fen.mainloop()
     
-    
-    
-#fonction pour déterminer s'il faut encore jouer
-def Tour(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, coule_j1, coule_j2):
-    tour = 0
-    
-    #on joue tant que toutes les cases "bateau" n'ont pas été coulées
-    while coule_j1 < nbcasestotal and coule_j2 < nbcasestotal:
-        quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_bateau_j1,appartenance_bateau_j2, tour%2)
-        tour+=1
-    
-    #lorsqu'elles l'ont été pour un joueur, fin du jeu
-    if coule_j1 == nbcasestotal:
-        return Fin 
-        
-    elif coule_j2 == nbcasestotal:
-        return Fin
-    
-    
+    #fonction qui renvoie True si un des joueurs a tous ses bateaux coulés(la partie est finie), et False sinon (la partie continue)
+def FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2):
+    j1 = j2 = 0
+    for i in range(10):
+        for j in range(10):
+            if appartenance_bateau_j1[i][j] and not(grille_tir_j2[i][j]):
+                j1+=1
+                
+            if appartenance_bateau_j2[i][j] and not(grille_tir_j1[i][j]):
+                j2+=1
+
+    if j1==0 or j2==0:
+        return True
+    return False
+   
     
 #fonction pour dessiner les deux grilles du joueur dont c'est le tour. 
 def quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_bateau_j1,appartenance_bateau_j2, joueur, ton_appartenance_bateau, autre_appartenance):
@@ -261,15 +275,14 @@ def quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_b
         aire_jeu1.bind("<Button-1>", lambda event : Tir(event, appartenance_bateau_j1, grille_tir_j1, joueur, coule_j1, coule_j2))
         
         fen.mainloop()
-        
-        
+       
     
 #placement des bateaux pour les deux joueurs
-EtapePlacerBateaux(appartenance_bateau_j1, bateaux_j1)
-EtapePlacerBateaux(appartenance_bateau_j2, bateaux_j2)
+EtapePlacerBateaux(appartenance_bateau_j1, bateaux_j1, 1)
+EtapePlacerBateaux(appartenance_bateau_j2, bateaux_j2, 2)
 
 #appel des tours (il se peut que cette fonction devienne récursive)
-Tour(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, coule_j1, coule_j2)
+#Tour(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, coule_j1, coule_j2)
 
 fen = Tk()
 
@@ -282,4 +295,3 @@ Grille(aire_jeu2)
 aire_jeu1.bind("<Button-1>", lambda event : Tir(event, appartenance_bateau_j1, grille_tir_j1))
 
 fen.mainloop()
-
