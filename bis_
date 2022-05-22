@@ -53,7 +53,7 @@ def PlacerCaseBateau(bateau, event, appartenance_bateau,aire_jeu_placer, lon_bat
             aire_jeu_placer.unbind("<Button-1>")
             
             if COMPTEURBATEAU == 5: #si tous les bateaux sont placés, ferme la fenêtre
-                fen.destroy()
+                fen.after(2000, fen.destroy())
 
     
 
@@ -111,8 +111,8 @@ def Retour(bateaux, appartenance_bateau, aire_jeu_placer, fen):
     
     
 #action de tirer sur une case, comprend le cas où un bateau est touché et quand aucun n'est touché (pas finie)
-def Tir(event, appartenance_bateau, grille_tir,aire_jeu_gauche): 
-    global a, b , x
+def Tir(event, appartenance_bateau, grille_tir,aire_jeu_gauche, fen): 
+    x = 0
     
     if x ==0 :
         a, b, x1, y1, x2, y2 = IdentificationCase(event)
@@ -123,8 +123,12 @@ def Tir(event, appartenance_bateau, grille_tir,aire_jeu_gauche):
             else:   #aucun bateau n'est touché
                 Croix(x1, y1, x2, y2, aire_jeu_gauche)
             grille_tir[a][b] = True
-        x = 1
-      
+        x +=1
+        
+    if x> 0:
+        fen.after(1000, fen.destroy())
+
+        return a, b
         
 #trace une croix
 def Croix(x1, y1, x2, y2, aire_jeu):
@@ -255,42 +259,58 @@ def FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, gri
 
 #trouve le bateau auquel appartient une case choisie si elle appartient à un bateau
 def TrouverBateau(bateaux, case_cherchee):
+    
     for bateau in range(5):
         for case in bateaux[bateau]:
             if case_cherchee == case:
-                print(case, bateau)
+                
                 return bateau
 
-def CasBateauCoule(bateaux, grille_tir, appartenance_bateau, joueur, a, b):    
-    print(a, b)
-    Case = (a, b)
-    bat = TrouverBateau(bateaux, Case)
-    print (bat)
+def CasBateauCoule(bateaux, grille_tir, appartenance_bateau, joueur, a, b , B):    
+    
     
     if joueur == 1:
-         
-        for i in range(len(bateaux[bat])):
-            
-            if a <= 9:
-                grille_tir_j1[i[0]+1][i[1]] = True
-            if a >= 0:
-                grille_tir_j1[i[0]-1][i[1]] = True
-            if b <= 9:
-                grille_tir_j1[i[0]][i[1]+1] = True
-            if b >= 0:
-                grille_tir_j1[i[0]][i[1]+1] = True
+        compteur = 0
+        for i in bateaux[B]:
+            if grille_tir_j1[i[0]][i[1]]:
+                compteur +=1
+                
+        if compteur == len(bateaux[B]) :
+            for i in bateaux[B]:
+                
+                
+                if a < 8 and not(grille_tir_j1[i[0]+1][i[1]]) :
+                    grille_tir_j1[i[0]+1][i[1]] = True
+                    
+                if a > 0 and not(grille_tir_j1[i[0]-1][i[1]]):
+                    grille_tir_j1[i[0]-1][i[1]] = True
+                    
+                if b <8 and not(grille_tir_j1[i[0]][i[1]+1]):
+                    grille_tir_j1[i[0]][i[1]+1] = True
+                    
+                if b >0 and not(grille_tir_j1[i[0]][i[1]-1]):
+                    grille_tir_j1[i[0]][i[1]-1] = True
         
     elif joueur == 0:
-        for i in range(len(bateaux[bat])):
-            
-            if a <= 9:
-                grille_tir_j2[i[0]+1][i[1]] = True
-            if a >= 0:
-                grille_tir_j2[i[0]-1][i[1]] = True
-            if b <= 9:
-                grille_tir_j2[i[0]][i[1]+1] = True
-            if b >= 0:
-                grille_tir_j2[i[0]][i[1]+1] = True
+        
+        compteur = 0
+        for i in bateaux[B]:
+            if grille_tir_j2[i[0]][i[1]]:
+                compteur +=1
+                
+        if compteur == len(bateaux[B]) :
+            for i in bateaux[B]:
+                if a <8 and not(grille_tir_j2[i[0]+1][i[1]]):
+                    grille_tir_j2[i[0]+1][i[1]] = True
+                    
+                if a >0 and not(grille_tir_j2[i[0]-1][i[1]]):
+                    grille_tir_j2[i[0]-1][i[1]] = True
+                    
+                if b < 8 and not(grille_tir_j2[i[0]][i[1]+1]):
+                    grille_tir_j2[i[0]][i[1]+1] = True
+                    
+                if b > 0 and not(grille_tir_j2[i[0]][i[1]-1]):
+                    grille_tir_j2[i[0]][i[1]-1] = True
     
     
 #fonction pour dessiner les deux grilles du joueur dont c'est le tour. 
@@ -303,29 +323,26 @@ def quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_b
         Grille(aire_jeu_gauche)
         Grille(aire_jeu_droite)
         
+        
+        
         if joueur == 1:
+            nom = Label(fen, text = "Joueur 1", fg = 'red')
+            nom.pack(side = TOP, pady = 10)
             Redessiner(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2, aire_jeu_gauche, aire_jeu_droite, joueur)
-            aire_jeu_gauche.bind("<Button-1>", lambda event : Tir(event, appartenance_bateau_j2, grille_tir_j1, aire_jeu_gauche))
+            aire_jeu_gauche.bind("<Button-1>", lambda event : Tir(event, appartenance_bateau_j2, grille_tir_j1, aire_jeu_gauche, fen))
             
 
         elif joueur == 0:
+            nom = Label(fen, text = "Joueur 2", fg = 'red')
+            nom.pack(side = TOP, pady = 10)
             Redessiner(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2, aire_jeu_gauche, aire_jeu_droite, joueur)
-            aire_jeu_gauche.bind("<Button-1>", lambda event : Tir(event, appartenance_bateau_j1, grille_tir_j2, aire_jeu_gauche))
+            aire_jeu_gauche.bind("<Button-1>", lambda event : Tir(event, appartenance_bateau_j1, grille_tir_j2, aire_jeu_gauche, fen))
             
 
         fen.mainloop()
-       
-        if joueur == 1:
-            fen.destroy()
-            CasBateauCoule(bateaux_j2, grille_tir_j1,appartenance_bateau_j1, joueur, a, b)
-            FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)
+        
             
-        elif joueur == 0:
-            fen.destroy()
-            CasBateauCoule(bateaux_j1, grille_tir_j2,appartenance_bateau_j2, joueur, a, b)
-            FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)
-            
-        return    
+        return a, b
         
     
 #placement des bateaux pour les deux joueurs
@@ -333,10 +350,23 @@ EtapePlacerBateaux(appartenance_bateau_j1, bateaux_j1, 1)
 EtapePlacerBateaux(appartenance_bateau_j2, bateaux_j2, 2)
 joueur = 1
 x = 0
-#appel des tours (il se peut que cette fonction devienne récursive)
+
 while not(FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)):
-    quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_bateau_j1,appartenance_bateau_j2, joueur)
-    joueur = (joueur+1)%2   
-    x  = 0
     
-#coder fin partie
+    a, b = quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_bateau_j1,appartenance_bateau_j2, joueur)
+    
+    CaseCherchee = (a , b)
+    
+    if joueur == 1:
+        B = TrouverBateau(bateaux_j2, CaseCherchee)
+        if B != None:
+            CasBateauCoule(bateaux_j2, grille_tir_j1,appartenance_bateau_j1, joueur, a, b, B)
+        FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)
+        
+    elif joueur == 0:
+        B = TrouverBateau(bateaux_j1, CaseCherchee)
+        if B != None:
+            CasBateauCoule(bateaux_j1, grille_tir_j2,appartenance_bateau_j2, joueur, a, b, B)
+        FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)
+    
+    joueur = (joueur+1)%2  
