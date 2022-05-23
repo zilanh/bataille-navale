@@ -343,12 +343,38 @@ def quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_b
         
             
         return a, b
+ 
+#fonction qui détermine le gagant à la fin de la partie
+def Gagnant(grille_tir_j1, grille_tir_j2, appartenance_bateau_j1, appartenance_bateau_j2):
+    for i in range(10):
+        for j in range(10):
+            if appartenance_bateau_j1[i][j] and (not grille_tir_j2[i][j]):
+                return 1
+            elif appartenance_bateau_j2[i][j] and (not grille_tir_j1[i][j]):
+                return 2
+            
+#fonction qui affiche le gagnant
+def FenetreFin(gagnant):
+    fen2=Tk()
+    fen2.geometry("400x400")
+    
+    image1 = Image.open("bateauquicoule.jpg")
+    fond = ImageTk.PhotoImage(image1)
+
+    label1 = Label(image=fond)
+    label1.image = fond
+    label1.place(x=0, y=0)
+    
+    texte = Label(fen2, text = ("C'est le joueur " + str(gagnant) + " qui gagne!"), fg='red', bg='white', font=("Helvetica",20))
+    texte.pack(side=TOP)
+    
+    fen2.mainloop()
         
     
 #placement des bateaux pour les deux joueurs
 EtapePlacerBateaux(appartenance_bateau_j1, bateaux_j1, 1)
 EtapePlacerBateaux(appartenance_bateau_j2, bateaux_j2, 2)
-joueur = 1
+joueur = 0
 x = 0
 
 while not(FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)):
@@ -370,3 +396,5 @@ while not(FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j
         FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)
     
     joueur = (joueur+1)%2  
+    
+    FenetreFin(Gagnant(grille_tir_j1, grille_tir_j2, appartenance_bateau_j1, appartenance_bateau_j2))
