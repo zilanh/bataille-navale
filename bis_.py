@@ -133,28 +133,25 @@ def Retour(bateaux, appartenance_bateau, aire_jeu_placer, fen):
     
 #action de tirer sur une case, comprend le cas où un bateau est touché et quand aucun n'est touché (pas finie)
 def Tir(event, appartenance_bateau, grille_tir,aire_jeu_gauche, fen): 
-    x = 0
-    
-    if x ==0 :
-        a, b, x1, y1, x2, y2 = IdentificationCase(event)
-        if not grille_tir[a][b]:
-            if appartenance_bateau[a][b]: #un bateau est touché
-                Case(x1, y1, x2, y2, aire_jeu_gauche)
-            
-            else:   #aucun bateau n'est touché
-                Croix(x1, y1, x2, y2, aire_jeu_gauche)
-            grille_tir[a][b] = True
-        x +=1
-        
-    if x> 0:
-        fen.after(1000, fen.destroy())
+    a, b, x1, y1, x2, y2 = IdentificationCase(event)
+    if not grille_tir[a][b]:
+        if appartenance_bateau[a][b]: #un bateau est touché
+            Case(x1, y1, x2, y2, aire_jeu_gauche)
 
-        return a, b
+        else:   #aucun bateau n'est touché
+            Croix(x1, y1, x2, y2, aire_jeu_gauche)
+        grille_tir[a][b] = True
+
+
+
+    fen.after(1000, fen.destroy())
+
+    return a, b
         
 #trace une croix
 def Croix(x1, y1, x2, y2, aire_jeu):
-    aire_jeu.create_line(x1, y1, x2, y2)
-    aire_jeu.create_line(x1, y2, x2, y1)
+    aire_jeu.create_line(x1, y1, x2, y2, fill = 'white')
+    aire_jeu.create_line(x1, y2, x2, y1, fill = 'white')
 
     
     
