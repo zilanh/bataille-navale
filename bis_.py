@@ -229,7 +229,22 @@ def Redessiner(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, gr
                     
                 if grille_tir_j1[c][d]:
                     Croix(d * taille_case, c * taille_case,(d + 1) * taille_case, (c + 1)* taille_case, aire_jeu_droite)
-                    
+                 
+#fonction qui affiche les règles si besoin               
+def reglesdujeu():
+    fen1 = Tk()
+    fen1.geometry("400x400")
+    
+    affichageregles=""
+    fichier = open("reglesdujeu.txt","r")
+    for ligne in fichier:
+        affichageregles+=ligne
+    fichier.close()
+    
+    regles= Label(fen1, text=str(affichageregles).encode('utf8'))
+
+    regles.pack(expand =YES, fill = BOTH)
+    fen1.mainloop()
                     
 #fonction pour qu'un joueur puisse placer ses bateaux
 def EtapePlacerBateaux(appartenance_bateau, bateaux, nomjoueur):
@@ -252,14 +267,18 @@ def EtapePlacerBateaux(appartenance_bateau, bateaux, nomjoueur):
     bateau4 = Button(text="Croiseur (4 cases)", command= lambda: PlacerBateau(4, appartenance_bateau, bateaux,aire_jeu_placer, bateau4, fen))
     bateau5 = Button(text="Porte-avion (5 cases)", command= lambda: PlacerBateau(5, appartenance_bateau, bateaux,aire_jeu_placer, bateau5, fen))
     
-    bateau2.pack()
-    bateau3s.pack()
-    bateau3c.pack()
-    bateau4.pack()
-    bateau5.pack()
+    bateau2.pack(pady=2)
+    bateau3s.pack(pady=2)
+    bateau3c.pack(pady=2)
+    bateau4.pack(pady=2)
+    bateau5.pack(pady=2)
     
     retour = Button(text="Retour", command= lambda : Retour(bateaux, appartenance_bateau, aire_jeu_placer, fen))
-    retour.pack()
+    retour.pack(pady=10)
+    
+    #affichage des règles
+    aide = Button(fen, text = "?", command = lambda: reglesdujeu()) 
+    aide.pack(pady=2)
     
     fen.mainloop()
     
@@ -359,7 +378,10 @@ def quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_b
             Redessiner(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2, aire_jeu_gauche, aire_jeu_droite, joueur)
             aire_jeu_gauche.bind("<Button-1>", lambda event : Tir(event, appartenance_bateau_j1, grille_tir_j2, aire_jeu_gauche, fen))
             
-
+        #affichage des règles
+        aide = Button(fen, text = "?", command = lambda: reglesdujeu()) 
+        aide.pack(pady=2)
+        
         fen.mainloop()
         
             
