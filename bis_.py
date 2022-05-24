@@ -134,8 +134,9 @@ def Retour(bateaux, appartenance_bateau, aire_jeu_placer, fen):
     
 #action de tirer sur une case, comprend le cas où un bateau est touché et quand aucun n'est touché (pas finie)
 def Tir(event, appartenance_bateau, grille_tir,aire_jeu_gauche, fen): 
-    valide = not grille_tir[a][b]
+   
     a, b, x1, y1, x2, y2 = IdentificationCase(event)
+    valide = not grille_tir[a][b]
     if valide:
         
         if appartenance_bateau[a][b]: #un bateau est touché
