@@ -105,7 +105,8 @@ def Valide(bateau: list, a, b, appartenance_bateau):
             valide_adjacent = valide_adjacent and une_case_en_contact
                     
                     
-    else: valide_autre_bateau = False
+    else:
+        valide_autre_bateau = False
 
     
     return valide_autre_bateau and valide_adjacent
@@ -133,8 +134,10 @@ def Retour(bateaux, appartenance_bateau, aire_jeu_placer, fen):
     
 #action de tirer sur une case, comprend le cas où un bateau est touché et quand aucun n'est touché (pas finie)
 def Tir(event, appartenance_bateau, grille_tir,aire_jeu_gauche, fen): 
+    valide = not grille_tir[a][b]
     a, b, x1, y1, x2, y2 = IdentificationCase(event)
-    if not grille_tir[a][b]:
+    if valide:
+        
         if appartenance_bateau[a][b]: #un bateau est touché
             Case(x1, y1, x2, y2, aire_jeu_gauche)
 
@@ -143,8 +146,8 @@ def Tir(event, appartenance_bateau, grille_tir,aire_jeu_gauche, fen):
         grille_tir[a][b] = True
 
 
-
-    fen.after(1000, fen.destroy())
+    if valide:
+        fen.after(1000, fen.destroy())
 
     return a, b
         
