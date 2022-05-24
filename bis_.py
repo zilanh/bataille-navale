@@ -1,4 +1,5 @@
 from tkinter import *
+from PIL import ImageTk, Image
 
 bleu_fonce = '#22155C'
 bleu_clair = '#159CDA'
@@ -6,6 +7,26 @@ blanc = '#DDF4FF'
 rouge = '#FF5454'
 taille_case = 50
 taille_grille = taille_case * 10
+
+
+def demandernom(j):
+    def nom(event): 
+        global nomdonne
+        nomdonne = nom1.get()
+        fenetre.destroy()
+        return nomdonne
+    fenetre = Tk()
+    nom1 = Entry(fenetre) 
+    nom1.bind("<Return>", nom)
+    texte = Label(fenetre, text = "Nom du joueur " + str(j) + ":") 
+    nom1.pack(side=BOTTOM)
+    texte.pack(side=TOP)
+    fenetre.mainloop()
+    return nomdonne
+    
+joueur1=demandernom(1)
+joueur2=demandernom(2)
+
 
 
 cases = [[[(k, i), (k + taille_case, i), (k, i + taille_case), (k + taille_case, i + taille_case)] for k in range(0, taille_grille, taille_case)] for i in range(0, taille_grille, taille_case)]
@@ -211,7 +232,7 @@ def Redessiner(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, gr
                     
                     
 #fonction pour qu'un joueur puisse placer ses bateaux
-def EtapePlacerBateaux(appartenance_bateau, bateaux, joueur):
+def EtapePlacerBateaux(appartenance_bateau, bateaux, nomjoueur):
     global COMPTEURBATEAU 
     COMPTEURBATEAU = 0
     fen = Tk()
@@ -221,7 +242,7 @@ def EtapePlacerBateaux(appartenance_bateau, bateaux, joueur):
     Grille(aire_jeu_placer)
     
     #affichage du nom du joueur
-    nom= Label(fen, text = "Joueur "+ str(joueur), fg = 'red')
+    nom= Label(fen, text = nomjoueur, fg='red')
     nom.pack(side = TOP, pady = 10)
     
     #création des boutons pour créer les bateaux
@@ -326,14 +347,14 @@ def quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_b
         
         
         if joueur == 1:
-            nom = Label(fen, text = "Joueur 1", fg = 'red')
+            nom = Label(fen, text = joueur1, fg = 'red')
             nom.pack(side = TOP, pady = 10)
             Redessiner(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2, aire_jeu_gauche, aire_jeu_droite, joueur)
             aire_jeu_gauche.bind("<Button-1>", lambda event : Tir(event, appartenance_bateau_j2, grille_tir_j1, aire_jeu_gauche, fen))
             
 
         elif joueur == 0:
-            nom = Label(fen, text = "Joueur 2", fg = 'red')
+            nom = Label(fen, text = joueur2, fg = 'red')
             nom.pack(side = TOP, pady = 10)
             Redessiner(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2, aire_jeu_gauche, aire_jeu_droite, joueur)
             aire_jeu_gauche.bind("<Button-1>", lambda event : Tir(event, appartenance_bateau_j1, grille_tir_j2, aire_jeu_gauche, fen))
@@ -343,17 +364,15 @@ def quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_b
         
             
         return a, b
- 
-#fonction qui détermine le gagant à la fin de la partie
+    
 def Gagnant(grille_tir_j1, grille_tir_j2, appartenance_bateau_j1, appartenance_bateau_j2):
     for i in range(10):
         for j in range(10):
             if appartenance_bateau_j1[i][j] and (not grille_tir_j2[i][j]):
-                return 1
+                return joueur1
             elif appartenance_bateau_j2[i][j] and (not grille_tir_j1[i][j]):
-                return 2
-            
-#fonction qui affiche le gagnant
+                return joueur2
+
 def FenetreFin(gagnant):
     fen2=Tk()
     fen2.geometry("400x400")
@@ -365,15 +384,16 @@ def FenetreFin(gagnant):
     label1.image = fond
     label1.place(x=0, y=0)
     
-    texte = Label(fen2, text = ("C'est le joueur " + str(gagnant) + " qui gagne!"), fg='red', bg='white', font=("Helvetica",20))
+    texte = Label(fen2, text = ("C'est " + gagnant +" qui gagne!"), fg='red', bg='white', font=("Helvetica",20))
     texte.pack(side=TOP)
     
     fen2.mainloop()
+    
         
     
 #placement des bateaux pour les deux joueurs
-EtapePlacerBateaux(appartenance_bateau_j1, bateaux_j1, 1)
-EtapePlacerBateaux(appartenance_bateau_j2, bateaux_j2, 2)
+EtapePlacerBateaux(appartenance_bateau_j1, bateaux_j1, joueur1)
+EtapePlacerBateaux(appartenance_bateau_j2, bateaux_j2, joueur2)
 joueur = 0
 x = 0
 
@@ -395,6 +415,7 @@ while not(FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j
             CasBateauCoule(bateaux_j1, grille_tir_j2,appartenance_bateau_j2, joueur, a, b, B)
         FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)
     
-    joueur = (joueur+1)%2  
+    joueur = (joueur+1)%2
     
-    FenetreFin(Gagnant(grille_tir_j1, grille_tir_j2, appartenance_bateau_j1, appartenance_bateau_j2))
+    
+FenetreFin(Gagnant(grille_tir_j1, grille_tir_j2, appartenance_bateau_j1, appartenance_bateau_j2))
