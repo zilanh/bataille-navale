@@ -303,13 +303,13 @@ def CasBateauCoule(bateaux, grille_tir, appartenance_bateau, joueur, a, b , B):
                 if a < 8 and not(grille_tir_j1[i[0]+1][i[1]]) :
                     grille_tir_j1[i[0]+1][i[1]] = True
                     
-                if a > 0 and not(grille_tir_j1[i[0]-1][i[1]]):
+                if a > 1 and not(grille_tir_j1[i[0]-1][i[1]]):
                     grille_tir_j1[i[0]-1][i[1]] = True
                     
                 if b <8 and not(grille_tir_j1[i[0]][i[1]+1]):
                     grille_tir_j1[i[0]][i[1]+1] = True
                     
-                if b >0 and not(grille_tir_j1[i[0]][i[1]-1]):
+                if b >1 and not(grille_tir_j1[i[0]][i[1]-1]):
                     grille_tir_j1[i[0]][i[1]-1] = True
         
     elif joueur == 0:
@@ -324,13 +324,13 @@ def CasBateauCoule(bateaux, grille_tir, appartenance_bateau, joueur, a, b , B):
                 if a <8 and not(grille_tir_j2[i[0]+1][i[1]]):
                     grille_tir_j2[i[0]+1][i[1]] = True
                     
-                if a >0 and not(grille_tir_j2[i[0]-1][i[1]]):
+                if a >1 and not(grille_tir_j2[i[0]-1][i[1]]):
                     grille_tir_j2[i[0]-1][i[1]] = True
                     
                 if b < 8 and not(grille_tir_j2[i[0]][i[1]+1]):
                     grille_tir_j2[i[0]][i[1]+1] = True
                     
-                if b > 0 and not(grille_tir_j2[i[0]][i[1]-1]):
+                if b > 1 and not(grille_tir_j2[i[0]][i[1]-1]):
                     grille_tir_j2[i[0]][i[1]-1] = True
     
     
