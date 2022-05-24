@@ -365,6 +365,35 @@ def quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_b
             
         return a, b
     
+def IA_ish():
+    EtapePlacerBateaux(appartenance_bateau_j1, bateaux_j1, joueur1)
+    while not(FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)):
+        
+        a, b = randint(0, 9), randint(0, 9)
+    
+        if not grille_tir_j2[a][b]:
+            
+            grille_tir[a][b] = True
+        
+        fen.after(1000, fen.destroy())
+        
+        CaseCherchee = (a , b)
+        
+        if joueur == 1:
+            B = TrouverBateau(bateaux_j2, CaseCherchee)
+            if B != None:
+                CasBateauCoule(bateaux_j2, grille_tir_j1,appartenance_bateau_j1, joueur, a, b, B)
+            FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)
+            
+        elif joueur == 0:
+            B = TrouverBateau(bateaux_j1, CaseCherchee)
+            if B != None:
+                CasBateauCoule(bateaux_j1, grille_tir_j2,appartenance_bateau_j2, joueur, a, b, B)
+            FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)
+        
+        joueur = (joueur+1)%2
+        
+    
 def Gagnant(grille_tir_j1, grille_tir_j2, appartenance_bateau_j1, appartenance_bateau_j2):
     for i in range(10):
         for j in range(10):
@@ -394,28 +423,30 @@ def FenetreFin(gagnant):
 #placement des bateaux pour les deux joueurs
 EtapePlacerBateaux(appartenance_bateau_j1, bateaux_j1, joueur1)
 EtapePlacerBateaux(appartenance_bateau_j2, bateaux_j2, joueur2)
-joueur = 0
-x = 0
+def PartieDeuxJoueurs():
+    joueur = 0
 
-while not(FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)):
+    while not(FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)):
+
+        a, b = quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_bateau_j1,appartenance_bateau_j2, joueur)
+
+        CaseCherchee = (a , b)
+
+        if joueur == 1:
+            B = TrouverBateau(bateaux_j2, CaseCherchee)
+            if B != None:
+                CasBateauCoule(bateaux_j2, grille_tir_j1,appartenance_bateau_j1, joueur, a, b, B)
+            FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)
+
+        elif joueur == 0:
+            B = TrouverBateau(bateaux_j1, CaseCherchee)
+            if B != None:
+                CasBateauCoule(bateaux_j1, grille_tir_j2,appartenance_bateau_j2, joueur, a, b, B)
+            FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)
+
+        joueur = (joueur+1)%2
+
+
+    FenetreFin(Gagnant(grille_tir_j1, grille_tir_j2, appartenance_bateau_j1, appartenance_bateau_j2))
     
-    a, b = quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_bateau_j1,appartenance_bateau_j2, joueur)
-    
-    CaseCherchee = (a , b)
-    
-    if joueur == 1:
-        B = TrouverBateau(bateaux_j2, CaseCherchee)
-        if B != None:
-            CasBateauCoule(bateaux_j2, grille_tir_j1,appartenance_bateau_j1, joueur, a, b, B)
-        FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)
-        
-    elif joueur == 0:
-        B = TrouverBateau(bateaux_j1, CaseCherchee)
-        if B != None:
-            CasBateauCoule(bateaux_j1, grille_tir_j2,appartenance_bateau_j2, joueur, a, b, B)
-        FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)
-    
-    joueur = (joueur+1)%2
-    
-    
-FenetreFin(Gagnant(grille_tir_j1, grille_tir_j2, appartenance_bateau_j1, appartenance_bateau_j2))
+PartieDeuxJoueurs()
