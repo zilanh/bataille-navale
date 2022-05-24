@@ -384,7 +384,7 @@ def FenetreFin(gagnant):
     label1.image = fond
     label1.place(x=0, y=0)
     
-    texte = Label(fen2, text = ("C'est " + gagnant +" qui gagne!"), fg='red', bg='white', font=("Helvetica",20))
+    texte = Label(fen2, text = ("C'est " + str(gagnant) +" qui gagne!"), fg='red', bg='white', font=("Helvetica",20))
     texte.pack(side=TOP)
     
     fen2.mainloop()
