@@ -1,0 +1,18 @@
+Règles de la Bataille Navale:
+
+Au début de la partie, chaque joueur place ses bateaux sur sa grille.
+ Les bateaux ne doivent pas être côte à côte (si après avoir placé 
+des cases le joueur se rend compte qu'il ne sera pas possible de finir
+ ce bateau, le bouton 'Retour' enlèvera la dernière case placée. 
+Attention: pour le bon déroulement du jeu et le respect des règles, 
+il faut placer toutes les cases de tous les bateaux.
+
+Chacun leur tour, les joueurs tirent sur la grille adverse (affichée
+ à gauche) en appuyant sur une case. Le but est de trouver les bateaux 
+adverses et de tous les couler. Sur la grille droite, les joueurs 
+peuvent voir leurs propres bateaux et là où l'adversaire a tiré. Sur 
+la grille gauche sont affichés les tirs du joueur et éventuellement 
+les bateaux découverts. Le premier joueur à couler tous les bateaux 
+adverses a gagné.
+
+Bonne chance!
