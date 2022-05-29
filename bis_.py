@@ -8,6 +8,26 @@ rouge = '#FF5454'
 taille_case = 50
 taille_grille = taille_case * 10
 
+def FenetreDebut():
+    fen4=Tk()
+    fen4.geometry("450x450")
+    
+    imagebateau = Image.open("bateaudepart.jpg")
+    fondfenetre = ImageTk.PhotoImage(imagebateau)
+
+    label2 = Label(image=fondfenetre)
+    label2.image = fondfenetre
+    label2.place(x=17, y=5)
+    
+    texteb = Label(fen4, text = "Bataille Navale", fg='red', bg='white', font=("Helvetica",30))
+    texteb.pack(side=TOP, pady=10)
+    
+    jouer = Button(text="jouer", command = fen4.destroy)
+    jouer.pack(side=BOTTOM)
+    
+    fen4.mainloop()
+    
+FenetreDebut()
 
 def demandernom(j):
     def nom(event): 
@@ -437,7 +457,7 @@ def FenetreFin(gagnant):
     label1.place(x=0, y=0)
     
     texte = Label(fen2, text = ("C'est " + str(gagnant) +" qui gagne!"), fg='red', bg='white', font=("Helvetica",20))
-    texte.pack(side=TOP)
+    texte.pack(side=TOP, pady=5)
     
     fen2.mainloop()
     
