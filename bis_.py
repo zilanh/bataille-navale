@@ -1,6 +1,9 @@
 from tkinter import *
 from PIL import ImageTk, Image
 
+
+##################### definition des variables globales ########################
+
 bleu_fonce = '#22155C'
 bleu_clair = '#159CDA'
 blanc = '#DDF4FF'
@@ -8,6 +11,32 @@ rouge = '#FF5454'
 taille_case = 50
 taille_grille = taille_case * 10
 
+
+cases = [[[(k, i), (k + taille_case, i), (k, i + taille_case), (k + taille_case, i + taille_case)] for k in range(0, taille_grille, taille_case)] for i in range(0, taille_grille, taille_case)]
+
+#représentation des bateaux par True/False
+appartenance_bateau_j1 = [[False for i in range(10)] for k in range(10)]
+appartenance_bateau_j2 = [[False for i in range(10)] for k in range(10)]
+
+#représentation des cases sur lesquelles chaque joueur a tiré par True/False
+grille_tir_j1 = [[False for i in range(10)] for k in range(10)]
+grille_tir_j2 = [[False for i in range(10)] for k in range(10)]
+
+#tableau contenant les cases appartenant à chaque bateau
+bateaux_j1 = [[] for i in range(5)]
+bateaux_j2 = [[] for i in range(5)]
+
+##################### fin de definition desvariables globales ########################
+
+
+
+
+
+
+############################# definition des fonctions ###################################
+
+
+#crée la fenêtre du début
 def FenetreDebut():
     fen4=Tk()
     fen4.geometry("450x450")
@@ -27,8 +56,7 @@ def FenetreDebut():
     
     fen4.mainloop()
     
-FenetreDebut()
-
+#demande le nom d'un joueur
 def demandernom(j):
     def nom(event): 
         global nomdonne
@@ -43,27 +71,6 @@ def demandernom(j):
     texte.pack(side=TOP)
     fenetre.mainloop()
     return nomdonne
-    
-joueur1=demandernom(1)
-joueur2=demandernom(2)
-
-
-
-cases = [[[(k, i), (k + taille_case, i), (k, i + taille_case), (k + taille_case, i + taille_case)] for k in range(0, taille_grille, taille_case)] for i in range(0, taille_grille, taille_case)]
-
-#représentation des bateaux par True/False
-appartenance_bateau_j1 = [[False for i in range(10)] for k in range(10)]
-appartenance_bateau_j2 = [[False for i in range(10)] for k in range(10)]
-
-#représentation des cases sur lesquelles chaque joueur a tiré par True/False
-grille_tir_j1 = [[False for i in range(10)] for k in range(10)]
-grille_tir_j2 = [[False for i in range(10)] for k in range(10)]
-
-#tableau contenant les cases appartenant à chaque bateau
-bateaux_j1 = [[] for i in range(5)]
-bateaux_j2 = [[] for i in range(5)]
-
-
 
 #fonction pour placer un bateau
 def PlacerBateau(lon_bateau, appartenance_bateau, bateaux,aire_jeu_placer, bouton,fen):
@@ -407,7 +414,9 @@ def quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_b
         
             
         return a, b
+
     
+#fonction qui devait permettre de jouer contre l'ordinateur, pas finie (à continuer par la suite)
 def IA_ish():
     EtapePlacerBateaux(appartenance_bateau_j1, bateaux_j1, joueur1)
     while not(FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)):
@@ -435,8 +444,9 @@ def IA_ish():
             FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)
         
         joueur = (joueur+1)%2
-        
     
+    
+#vérifie si il y a un joueur qui a gagne la partie
 def Gagnant(grille_tir_j1, grille_tir_j2, appartenance_bateau_j1, appartenance_bateau_j2):
     for i in range(10):
         for j in range(10):
@@ -445,6 +455,7 @@ def Gagnant(grille_tir_j1, grille_tir_j2, appartenance_bateau_j1, appartenance_b
             elif appartenance_bateau_j2[i][j] and (not grille_tir_j1[i][j]):
                 return joueur2
 
+#fenetre créée lorsqu'un joueur a gagné
 def FenetreFin(gagnant):
     fen2=Tk()
     fen2.geometry("400x400")
@@ -460,8 +471,19 @@ def FenetreFin(gagnant):
     texte.pack(side=TOP, pady=5)
     
     fen2.mainloop()
-    
-        
+
+############################# fin de définition des fonctions ###################################
+
+
+
+
+
+
+############################# programme principal ###################################
+
+FenetreDebut()
+joueur1=demandernom(1)
+joueur2=demandernom(2)       
     
 #placement des bateaux pour les deux joueurs
 EtapePlacerBateaux(appartenance_bateau_j1, bateaux_j1, joueur1)
