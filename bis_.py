@@ -481,23 +481,8 @@ def FenetreFin(gagnant):
     texte.pack(side=TOP, pady=5)
     
     fen2.mainloop()
-
-############################# fin de définition des fonctions ###################################
-
-
-
-
-
-
-############################# programme principal ###################################
-
-FenetreDebut()
-joueur1=demandernom(1)
-joueur2=demandernom(2)       
     
-#placement des bateaux pour les deux joueurs
-EtapePlacerBateaux(appartenance_bateau_j1, bateaux_j1, joueur1)
-EtapePlacerBateaux(appartenance_bateau_j2, bateaux_j2, joueur2)
+#permet la partie à deux joueurs
 def PartieDeuxJoueurs():
     joueur = 0
 
@@ -524,4 +509,22 @@ def PartieDeuxJoueurs():
 
     FenetreFin(Gagnant(grille_tir_j1, grille_tir_j2, appartenance_bateau_j1, appartenance_bateau_j2))
     
+
+############################# fin de définition des fonctions ###################################
+
+
+
+
+
+
+############################# programme principal ###################################
+
+FenetreDebut()
+joueur1=demandernom(1)
+joueur2=demandernom(2)       
+    
+#placement des bateaux pour les deux joueurs
+EtapePlacerBateaux(appartenance_bateau_j1, bateaux_j1, joueur1)
+EtapePlacerBateaux(appartenance_bateau_j2, bateaux_j2, joueur2)
+
 PartieDeuxJoueurs()
