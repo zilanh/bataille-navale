@@ -1,5 +1,6 @@
 from tkinter import *
 from PIL import ImageTk, Image
+from time import sleep
 
 
 ##################### definition des variables globales ########################
@@ -175,9 +176,8 @@ def Tir(event, appartenance_bateau, grille_tir,aire_jeu_gauche, fen):
             Croix(x1, y1, x2, y2, aire_jeu_gauche)
         grille_tir[a][b] = True
 
-
-    if valide:
-        fen.after(1000, fen.destroy())
+    sleep(0.5)
+    fen.destroy()
 
     return a, b
         
