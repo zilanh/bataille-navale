@@ -507,7 +507,8 @@ def PartieDeuxJoueurs():
         joueur = (joueur+1)%2
 
 
-    FenetreFin(Gagnant(grille_tir_j1, grille_tir_j2, appartenance_bateau_j1, appartenance_bateau_j2))
+    if not arret:
+        FenetreFin(Gagnant(grille_tir_j1, grille_tir_j2, appartenance_bateau_j1, appartenance_bateau_j2))
     
 
 ############################# fin de définition des fonctions ###################################
