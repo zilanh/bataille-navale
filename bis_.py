@@ -58,6 +58,7 @@ def FenetreDebut():
     
 #demande le nom d'un joueur
 def demandernom(j):
+    #enregistre le nom que le joueur rentre
     def nom(event): 
         global nomdonne
         nomdonne = nom1.get()
