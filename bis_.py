@@ -11,6 +11,7 @@ rouge = '#FF5454'
 taille_case = 50
 taille_grille = taille_case * 10
 
+arret = False
 
 cases = [[[(k, i), (k + taille_case, i), (k, i + taille_case), (k + taille_case, i + taille_case)] for k in range(0, taille_grille, taille_case)] for i in range(0, taille_grille, taille_case)]
 
@@ -58,7 +59,7 @@ def FenetreDebut():
     
 #demande le nom d'un joueur
 def demandernom(j):
-    #enregistre le nom que le joueur rentre
+    #fonction qui enregistre le nom que le joueur rentre
     def nom(event): 
         global nomdonne
         nomdonne = nom1.get()
@@ -380,7 +381,11 @@ def CasBateauCoule(bateaux, grille_tir, appartenance_bateau, joueur, a, b , B):
                     
                 if i[1] >= 1 and not(grille_tir_j2[i[0]][i[1]-1]):
                     grille_tir_j2[i[0]][i[1]-1] = True
-    
+ 
+#fonction qui permet d'arreter le jeu 
+def stop():
+    global arret
+    arret = True    
     
 #fonction pour dessiner les deux grilles du joueur dont c'est le tour. 
 def quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_bateau_j1,appartenance_bateau_j2, joueur):
@@ -410,6 +415,10 @@ def quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_b
         #affichage des règles
         aide = Button(fen, text = "?", command = lambda: reglesdujeu()) 
         aide.pack(pady=2)
+        
+        #arreter le jeu a la fin du tour
+        fin = Button(fen, text = "Arrêter le jeu après ce tour", command = lambda: stop())
+        fin.pack(pady=2)
         
         fen.mainloop()
         
@@ -492,7 +501,7 @@ EtapePlacerBateaux(appartenance_bateau_j2, bateaux_j2, joueur2)
 def PartieDeuxJoueurs():
     joueur = 0
 
-    while not(FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)):
+    while not(FinPartie(appartenance_bateau_j1, appartenance_bateau_j2, grille_tir_j1, grille_tir_j2)) and not(arret):
 
         a, b = quijoue(bateaux_j1, bateaux_j2, grille_tir_j1, grille_tir_j2, appartenance_bateau_j1,appartenance_bateau_j2, joueur)
 
