@@ -1,7 +1,7 @@
 Regles de la Bataille Navale:
 
 Au debut de la partie, chaque joueur place ses bateaux sur sa grille.
- Les bateaux ne doivent pas etre cote à cote (si apres avoir place 
+ Les bateaux ne doivent pas etre cote a cote (si apres avoir place 
 des cases le joueur se rend compte qu'il ne sera pas possible de finir
  ce bateau, le bouton 'Retour' enlevera la derniere case placee. 
 Attention: pour le bon deroulement du jeu et le respect des regles, 
