@@ -38,42 +38,7 @@ bateaux_j2 = [[] for i in range(5)]
 ############################# definition des fonctions ###################################
 
 
-#crée la fenêtre du début
-def FenetreDebut():
-    fen4=Tk()
-    fen4.geometry("450x450")
-    
-    imagebateau = Image.open("bateaudepart.jpg")
-    fondfenetre = ImageTk.PhotoImage(imagebateau)
 
-    label2 = Label(image=fondfenetre)
-    label2.image = fondfenetre
-    label2.place(x=17, y=5)
-    
-    texteb = Label(fen4, text = "Bataille Navale", fg='red', bg='white', font=("Helvetica",30))
-    texteb.pack(side=TOP, pady=10)
-    
-    jouer = Button(text="jouer", command = fen4.destroy)
-    jouer.pack(side=BOTTOM)
-    
-    fen4.mainloop()
-    
-#demande le nom d'un joueur
-def demandernom(j):
-    #fonction qui enregistre le nom que le joueur rentre
-    def nom(event): 
-        global nomdonne
-        nomdonne = nom1.get()
-        fenetre.destroy()
-        return nomdonne
-    fenetre = Tk()
-    nom1 = Entry(fenetre) 
-    nom1.bind("<Return>", nom)
-    texte = Label(fenetre, text = "Nom du joueur " + str(j) + ":") 
-    nom1.pack(side=BOTTOM)
-    texte.pack(side=TOP)
-    fenetre.mainloop()
-    return nomdonne
 
 #fonction pour placer un bateau
 def PlacerBateau(lon_bateau, appartenance_bateau, bateaux,aire_jeu_placer, bouton,fen):
@@ -464,6 +429,44 @@ def Gagnant(grille_tir_j1, grille_tir_j2, appartenance_bateau_j1, appartenance_b
                 return joueur1
             elif appartenance_bateau_j2[i][j] and (not grille_tir_j1[i][j]):
                 return joueur2
+
+
+#crée la fenêtre du début
+def FenetreDebut():
+    fen4=Tk()
+    fen4.geometry("450x450")
+    
+    imagebateau = Image.open("bateaudepart.jpg")
+    fondfenetre = ImageTk.PhotoImage(imagebateau)
+
+    label2 = Label(image=fondfenetre)
+    label2.image = fondfenetre
+    label2.place(x=17, y=5)
+    
+    texteb = Label(fen4, text = "Bataille Navale", fg='red', bg='white', font=("Helvetica",30))
+    texteb.pack(side=TOP, pady=10)
+    
+    jouer = Button(text="jouer", command = fen4.destroy)
+    jouer.pack(side=BOTTOM)
+    
+    fen4.mainloop()
+    
+#demande le nom d'un joueur
+def demandernom(j):
+    #fonction qui enregistre le nom que le joueur rentre
+    def nom(event): 
+        global nomdonne
+        nomdonne = nom1.get()
+        fenetre.destroy()
+        return nomdonne
+    fenetre = Tk()
+    nom1 = Entry(fenetre) 
+    nom1.bind("<Return>", nom)
+    texte = Label(fenetre, text = "Nom du joueur " + str(j) + ":") 
+    nom1.pack(side=BOTTOM)
+    texte.pack(side=TOP)
+    fenetre.mainloop()
+    return nomdonne
 
 #fenetre créée lorsqu'un joueur a gagné
 def FenetreFin(gagnant):
